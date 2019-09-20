@@ -1,43 +1,162 @@
 document.addEventListener('DOMContentLoaded', () => {
+  //GRID variables
   const width = 10
   const hight = 20
   const grid = document.querySelector('.grid')
   const cells = []
+
+  //SHAPE VARIABLES
+  const zShape = [3,4,14,15]
+  const tempArr = new Array
   let playerIdx = 0
+  // const zShape = {
+  //   name: 'Z', 
+  //   index: [3, 4, 14, 15]
+  // }
+
+  //SHAPES
+  // zShape
+  // zShape[0] = playerIdx - 1
+  // zShape[1] = playerIdx
+  // zShape[2] = playerIdx - width
+  // zShape[3] = playerIdx - width - 1
 
   //CREATES GRID ***** DO NOT TOUCH *****
   for (let i = 0; i < width * hight; i++) {
     const cell = document.createElement('DIV')
-    cell.addEventListener('click', handleClick)
+    //cell.addEventListener('click', handleClick)
     grid.appendChild(cell)
     cells.push(cell)
   }
 
-  //ADDS PLAYER 
-  function handleClick(e) {
-    e.target.classList.add('player')
+  //ADDS PLAYER ON 0:0
+  //cells[playerIdx].classList.add('player')
+
+
+  //Draws Shape
+  function drawShape() {
+    playerIdx = width / 2
+    zShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
   }
+  drawShape()
 
-  cells[playerIdx].classList.add('player')
 
+  //MOVESHAPE
   document.addEventListener('keyup', (e) => {
-    cells[playerIdx].classList.remove('player')
-    const x = playerIdx % width
-    const y = Math.floor(playerIdx / width)
+    // const x = playerIdx % width
+    // const y = Math.floor(playerIdx / width)
+
+    // zShape.forEach(element => {
+    //   cells[element].classList.remove('player')
+    // })
 
     switch (e.keyCode) {
-      case 37: if (x > 0) playerIdx -= 1 //LEFT
+      case 37: //LEFT
+        for (let i = 0; i < zShape.length; i++) {
+          cells[zShape[i]].classList.remove('player')
+          zShape[i] -= 1
+          cells[zShape[i]].classList.add('player')
+          console.log(zShape[i])
+          console.log(zShape)
+        }
         break
-      case 38: if (y > 0) playerIdx -= width //UP
+      case 38: //UP **** Take Away later cant move up 
+        for (let i = 0; i < zShape.length; i++) {
+          cells[zShape[i]].classList.remove('player')
+          zShape[i] -= width
+          cells[zShape[i]].classList.add('player')
+          console.log(zShape[i])
+          console.log(zShape)
+        }
         break
-      case 39: if (x < width - 1) playerIdx += 1 //RIGHT
+      case 39: //RIGHT
+        for (let i = zShape.length - 1; i >= 0; i--) {
+          cells[zShape[i]].classList.remove('player')
+          zShape[i] += 1
+          cells[zShape[i]].classList.add('player')
+          console.log(zShape)
+        }
         break
-      case 40: if (y < hight - 1) playerIdx += width //DOWN
+      case 40: //DOWN
+        for (let i = zShape.length - 1; i >= 0; i--) {
+          cells[zShape[i]].classList.remove('player')
+          zShape[i] += width
+          cells[zShape[i]].classList.add('player')
+          console.log(zShape)
+        }
         break
     }
-    cells[playerIdx].classList.add('player')
   })
 })
+
+
+zShape.forEach(element => {
+  cells[element].classList.add('player')
+})
+
+
+
+//DISCARDED CODE
+
+// if (e.keyCode === 37) {
+//   console.log(typeof zShape.index)
+
+//   for (let i = 0; i < zShape.length; i++) {
+//     cells[zShape[i]].classList.remove('player')
+//     zShape[i] -= 1
+//     cells[zShape[i]].classList.add('player')
+//     console.log(zShape[i])
+//     console.log(zShape)
+//   }
+// }
+
+
+
+
+//   zShape.index.forEach(element => {
+//     cells[element].classList.remove('player')
+//     console.log(zShape.index[element])
+//     zShape.index[element] -= 1
+//     console.log(zShape.index[element])
+//     console.log(zShape.index)
+//     cells[element].classList.add('player')
+//   }) 
+// } else console.log(e.keyCode)
+// console.log(typeof e.keyCode)
+
+//cells[playerIdx].classList.remove('player')
+//const x = playerIdx % width
+//const y = Math.floor(playerIdx / width)
+
+//const zShape = [(playerIdx - width - 1), playerIdx - width, playerIdx, playerIdx + 1]
+
+  
+// //ADDS PLAYER ON CLICK
+// function handleClick(e) {
+//   e.target.classList.add('player')
+// }
+
+
+
+// document.addEventListener('keyup', (e) => {
+//   cells[playerIdx].classList.remove('player')
+//   const x = playerIdx % width
+//   const y = Math.floor(playerIdx / width)
+
+//   switch (e.keyCode) {
+//     case 37: if (x > 0) playerIdx -= 1 //LEFT
+//       break
+//     case 38: if (y > 0) playerIdx -= width //UP
+//       break
+//     case 39: if (x < width - 1) playerIdx += 1 //RIGHT
+//       break
+//     case 40: if (y < hight - 1) playerIdx += width //DOWN
+//       break
+//   }
+//   cells[playerIdx].classList.add('player')
+// })
 
 
 // document.addEventListener('DOMContentLoaded', () => {
