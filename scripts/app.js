@@ -7,8 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //SHAPE VARIABLES
   const zShape = [3,4,14,15]
-  const tempArr = new Array
-  let playerIdx = 0
+
+
+  
+  //const tempArr = new Array
+  //let playerIdx = 0
+
   // const zShape = {
   //   name: 'Z', 
   //   index: [3, 4, 14, 15]
