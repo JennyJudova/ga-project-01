@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //EVENT LISTENERS
   //MOVESHAPE LEFT // RIGHT // DOWN
   document.addEventListener('keyup', (e) => {
+    let isUsed = false
     switch (e.keyCode) {
       case 37: //LEFT
         if ((Math.min(...zShape) % width) > 0) {
@@ -84,22 +85,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         break
       case 40: //DOWN
+      
+        zShape.forEach(element => {
+          if (usedDivs.includes(element + width)) isUsed = true
+        })
 
-        // for (let i = 0; i < zShape.length; i++) {
+        if (isUsed) {
+          zShape.forEach(element => {
+            cells[element].classList.add('used')
+            cells[element].classList.remove('player')
+            usedDivs.push(element)
+            console.log(usedDivs)
+            return drawShape() // draws new shape
+          })
+        }
 
-        // }
-
-        // if (zShape.forEach(element => {
-        //   usedDivs.includes(element + width) === true
-        // })) {
-        //   zShape.forEach(element => {
-        //     cells[element].classList.add('used')
-        //     cells[element].classList.remove('player')
-        //     usedDivs.push(element)
-        //     console.log(usedDivs)
-        //     return drawShape() // draws new shape
-        //   })
-        // }
 
         if ((Math.max(...zShape) + width) < 200) {
           for (let i = zShape.length - 1; i >= 0; i--) {
@@ -123,6 +123,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 })
+
+
+
+// usedDivs.some((index) => {
+//   zShape.forEach(element => {
+//     cells[element].classList.add('used')
+//     cells[element].classList.remove('player')
+//     usedDivs.push(element)
+//     console.log(usedDivs)
+//     return drawShape() // draws new shape
+//   })
+// })
+
+// for (let i = 0; i < zShape.length; i++) {
+
+// }
+// function containsFalsey(array) {
+//   console.log(array)
+//   const falsy = [undefined, null, NaN, 0, '', 'false']
+//   const falsyCheck = array.some((string) => {
+//     return falsy.includes(string)
+//   })
+//   console.log(falsyCheck)
+//   return falsyCheck
+// }
+
+        
 
 // if (zShape.forEach(element => {
 //   usedDivs.includes(element + width)
