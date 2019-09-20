@@ -35,8 +35,12 @@ body {
 }
 
 .grid div.player {
-  background-color: black; 
+  background-color: darkblue; 
   background-size: 150px;
   background-position-x: 0;
   background-position-y: 0;
+}
+
+.grid div.used {
+  background-color: black;
 }

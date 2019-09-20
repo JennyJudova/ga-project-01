@@ -6,16 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const cells = []
 
   //SHAPE VARIABLES
-  const zShape = [3,4,14,15]
+  let zShape = [3,4,14,15]
+  let playerIdx = 0
+
+  //OTHER VARS
+  let usedDivs = new Array
 
 
-  
   //const tempArr = new Array
-  //let playerIdx = 0
 
   // const zShape = {
-  //   name: 'Z', 
-  //   index: [3, 4, 14, 15]
+  //   position1: [3, 4, 14, 15]
+  //   position2: [] 
   // }
 
   //SHAPES
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // zShape[2] = playerIdx - width
   // zShape[3] = playerIdx - width - 1
 
+
   //CREATES GRID ***** DO NOT TOUCH *****
   for (let i = 0; i < width * hight; i++) {
     const cell = document.createElement('DIV')
@@ -32,13 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.appendChild(cell)
     cells.push(cell)
   }
+  //CREATES GRID ***** DO NOT TOUCH *****
 
-  //ADDS PLAYER ON 0:0
-  //cells[playerIdx].classList.add('player')
-
-
-  //Draws Shape
+  //Draws Z Shape
   function drawShape() {
+    zShape = [3,4,14,15]
     playerIdx = width / 2
     zShape.forEach(element => {
       cells[element].classList.add('player')
@@ -47,18 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
   drawShape()
 
 
-  //MOVESHAPE
+
+  //EVENT LISTENERS
+  //MOVESHAPE LEFT // RIGHT // DOWN
   document.addEventListener('keyup', (e) => {
-
-
-    //   const x = playerIdx % width
-
-    //   switch (e.keyCode) {
-    //     case 37: if (x > 0) playerIdx -= 1 //LEFT
-    //       break
-    //     case 39: if (x < width - 1) playerIdx += 1 //RIGHT
-    //       break
-
     switch (e.keyCode) {
       case 37: //LEFT
         if ((Math.min(...zShape) % width) > 0) {
@@ -91,6 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         break
       case 40: //DOWN
+
+        // for (let i = 0; i < zShape.length; i++) {
+
+        // }
+
+        // if (zShape.forEach(element => {
+        //   usedDivs.includes(element + width) === true
+        // })) {
+        //   zShape.forEach(element => {
+        //     cells[element].classList.add('used')
+        //     cells[element].classList.remove('player')
+        //     usedDivs.push(element)
+        //     console.log(usedDivs)
+        //     return drawShape() // draws new shape
+        //   })
+        // }
+
         if ((Math.max(...zShape) + width) < 200) {
           for (let i = zShape.length - 1; i >= 0; i--) {
             cells[zShape[i]].classList.remove('player')
@@ -98,11 +108,59 @@ document.addEventListener('DOMContentLoaded', () => {
             cells[zShape[i]].classList.add('player')
             console.log(zShape)
           }
+        } else { //DROPS shape to a used array 
+          zShape.forEach(element => {
+            cells[element].classList.add('used')
+            cells[element].classList.remove('player')
+            usedDivs.push(element)
+            console.log(usedDivs)
+          })
+          return drawShape() // draws new shape
         }
         break
     }
   })
+
+
 })
+
+// if (zShape.forEach(element => {
+//   usedDivs.includes(element + width)
+// })) {
+//   zShape.forEach(element => {
+//     cells[element].classList.add('used')
+//     cells[element].classList.remove('player')
+//     usedDivs.push(element)
+//     console.log(usedDivs)
+//   })
+// }
+
+// zShape.forEach(element => {
+//   usedDivs.includes(element)
+//   cells[element].classList.add('used')
+//   cells[element].classList.remove('player')
+//   usedDivs.push(element)
+//   console.log(usedDivs)
+// })
+
+
+// zShape.forEach(element => {
+//   cells[element].classList.add('player')
+// })
+
+
+
+
+//CHANGE SHAPE
+
+// const zShape = {
+//   position1: [3, 4, 14, 15]
+//   position2: [] 
+// }
+
+
+
+
 
 
 //if ((zShape.reduce((a, b) => a + b)) + width > 790) 
