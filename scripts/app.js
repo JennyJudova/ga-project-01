@@ -45,21 +45,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //MOVESHAPE
   document.addEventListener('keyup', (e) => {
-    // const x = playerIdx % width
-    // const y = Math.floor(playerIdx / width)
 
-    // zShape.forEach(element => {
-    //   cells[element].classList.remove('player')
-    // })
+
+    //   const x = playerIdx % width
+
+    //   switch (e.keyCode) {
+    //     case 37: if (x > 0) playerIdx -= 1 //LEFT
+    //       break
+    //     case 39: if (x < width - 1) playerIdx += 1 //RIGHT
+    //       break
 
     switch (e.keyCode) {
       case 37: //LEFT
-        for (let i = 0; i < zShape.length; i++) {
-          cells[zShape[i]].classList.remove('player')
-          zShape[i] -= 1
-          cells[zShape[i]].classList.add('player')
-          console.log(zShape[i])
-          console.log(zShape)
+        if ((Math.min(...zShape) % width) > 0) {
+          for (let i = 0; i < zShape.length; i++) {
+            cells[zShape[i]].classList.remove('player')
+            zShape[i] -= 1
+            cells[zShape[i]].classList.add('player')
+            console.log(zShape[i])
+            console.log(zShape)
+          }
         }
         break
       case 38: //UP **** Take Away later cant move up 
@@ -72,19 +77,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         break
       case 39: //RIGHT
-        for (let i = zShape.length - 1; i >= 0; i--) {
-          cells[zShape[i]].classList.remove('player')
-          zShape[i] += 1
-          cells[zShape[i]].classList.add('player')
-          console.log(zShape)
+        if ((Math.max(...zShape) % width) < width - 1) {
+          for (let i = zShape.length - 1; i >= 0; i--) {
+            cells[zShape[i]].classList.remove('player')
+            zShape[i] += 1
+            cells[zShape[i]].classList.add('player')
+            console.log(zShape)
+          }
         }
         break
       case 40: //DOWN
-        for (let i = zShape.length - 1; i >= 0; i--) {
-          cells[zShape[i]].classList.remove('player')
-          zShape[i] += width
-          cells[zShape[i]].classList.add('player')
-          console.log(zShape)
+        if ((Math.max(...zShape) + width) < 200) {
+          for (let i = zShape.length - 1; i >= 0; i--) {
+            cells[zShape[i]].classList.remove('player')
+            zShape[i] += width
+            cells[zShape[i]].classList.add('player')
+            console.log(zShape)
+          }
         }
         break
     }
@@ -92,13 +101,13 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-zShape.forEach(element => {
-  cells[element].classList.add('player')
-})
-
-
+//if ((zShape.reduce((a, b) => a + b)) + width > 790) 
 
 //DISCARDED CODE
+
+// if (zShape.forEach(element => {
+//   zShape[element] + width > 200
+// })) 
 
 // if (e.keyCode === 37) {
 //   console.log(typeof zShape.index)
@@ -142,6 +151,7 @@ zShape.forEach(element => {
 
 // document.addEventListener('keyup', (e) => {
 //   cells[playerIdx].classList.remove('player')
+
 //   const x = playerIdx % width
 //   const y = Math.floor(playerIdx / width)
 
