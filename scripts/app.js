@@ -78,12 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   //EVENT LISTENERS
-  //MOVESHAPE LEFT // RIGHT // DOWN
+  //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keyup', (e) => {
+    
     let isUsed = false
+    let rightLeft = true
+    let tempArr = new Array
+
     switch (e.keyCode) {
       case 37: //LEFT
-        if ((Math.min(...currentShape) % width) > 0) {
+        tempArr = currentShape.filter(element => element % width > 0)
+        console.log(tempArr)
+        if (tempArr.length === 4) {
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] -= 1
@@ -93,22 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         break
+
       case 38: //UP **** Take Away later cant move up 
         upCount ++
         console.log(upCount)
         if (currentShape === zShape) return zShapeUp(upCount)
-
-        // for (let i = 0; i < currentShape.length; i++) {
-        //     cells[currentShape[i]].classList.remove('player')
-        //     currentShape[i] -= width
-        //     cells[currentShape[i]].classList.add('player')
-        //     console.log(currentShape[i])
-        //     console.log(currentShape)
-        //   }
-
         break
-      case 39: //RIGHT
-        if ((Math.max(...currentShape) % width) < width - 1) {
+
+      case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
+        tempArr = currentShape.filter(element => element % width < width - 1)
+        console.log(tempArr)
+        if (tempArr.length === 4) {
           for (let i = currentShape.length - 1; i >= 0; i--) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] += 1
@@ -117,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         break
+
       case 40: //DOWN
         currentShape.forEach(element => {
           if (usedDivs.includes(element + width)) isUsed = true
@@ -131,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return drawShape() // draws new shape
           })
         }
-
 
         if ((Math.max(...currentShape) + width) < 200) {
           for (let i = currentShape.length - 1; i >= 0; i--) {
@@ -155,6 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 })
+
+
+//MOVING UP 
+// for (let i = 0; i < currentShape.length; i++) {
+//     cells[currentShape[i]].classList.remove('player')
+//     currentShape[i] -= width
+//     cells[currentShape[i]].classList.add('player')
+//     console.log(currentShape[i])
+//     console.log(currentShape)
+//   }
 
 
 
