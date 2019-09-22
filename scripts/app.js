@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //SHAPE VARIABLES
   let currentShape = new Array 
+  let allShapes = new Array
   let zShape = new Array
+  let sShape = new Array
+  let lShape = new Array
   let playerId = 0
 
   //OTHER VARS
@@ -39,16 +42,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //CREATES GRID ***** DO NOT TOUCH *****
 
+  //CREATES AN ARRAY OF ALL SHAPES
+  function shapeArr() {
+    allShapes = []
+    zShape = [3,4,14,15]
+    sShape = [13,4,14,5]
+    lShape = [4,14,24,25]
+    allShapes.push(zShape)
+    allShapes.push(sShape)
+    allShapes.push(lShape)
+    drawShape(allShapes)
+  }
+  shapeArr()
+
 
   //DRAWS EVERY NEW SHAPE  
-  function drawShape() {
-    zShape = [3,4,14,15]
-    currentShape = zShape
+  function drawShape(allShapes) {
+    //console.log(allShapes)
+    currentShape = allShapes[Math.floor(Math.random() * 3 )]
+    console.log(currentShape)
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
   }
-  drawShape()
+  //drawShape()
 
   //ALL zSHAPE POSITIONS // position ===1 [dbca] ===0 [abcd]
   function zShapeUp(upCount) {
@@ -120,17 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
         break
 
       case 40: //DOWN
+        isUsed = false
         currentShape.forEach(element => {
+          console.log(element)
           if (usedDivs.includes(element + width)) isUsed = true
         })
 
-        if (isUsed) {
+        if (isUsed === true) {
           currentShape.forEach(element => {
             cells[element].classList.add('used')
             cells[element].classList.remove('player')
             usedDivs.push(element)
+            console.log(isUsed)
             console.log(usedDivs)
-            return drawShape() // draws new shape
+            isUsed = false
+            return shapeArr() // creates figure array and draws new shape
           })
         }
 
@@ -148,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             usedDivs.push(element)
             console.log(usedDivs)
           })
-          return drawShape() // draws new shape
+          return shapeArr() // creates figure array and draws new shape
         }
         break
     }
