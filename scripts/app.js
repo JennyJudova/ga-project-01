@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  //ALL SHAPES
   //ALL zSHAPE POSITIONS // position ===1 [dbca] ===0 [abcd]
   function zShapeUp(upCount) {
     const playerId = currentShape[1]
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape[1] = playerId
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width
-    } else {
+    } else { // default position 
       currentShape[0] = playerId - 1
       currentShape[1] = playerId
       currentShape[2] = playerId + width
@@ -73,6 +74,61 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[element].classList.add('player')
     })
   }
+
+  //ALL sSHAPE POSITIONS //
+  function sShapeUp(upCount) {
+    const playerId = currentShape[1]
+    currentShape.forEach(element => {
+      cells[element].classList.remove('player')
+    })
+    if (upCount % 2 === 1) {
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + width + 1
+    } else { // default position 
+      currentShape[0] = playerId + width - 1
+      currentShape[1] = playerId
+      currentShape[2] = playerId + width
+      currentShape[3] = playerId + 1
+    }
+    currentShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
+  }
+
+  //ALL lShapeUp POSITIONS //
+  function lShapeUp(upCount) {
+    const playerId = currentShape[1]
+    currentShape.forEach(element => {
+      cells[element].classList.remove('player')
+    })
+    if (upCount % 4 === 1) {
+      currentShape[0] = playerId - 1
+      currentShape[1] = playerId
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + width - 1
+    } else if (upCount % 4 === 2) {   
+      currentShape[0] = playerId - width - 1
+      currentShape[1] = playerId - width
+      currentShape[2] = playerId 
+      currentShape[3] = playerId + width
+    } else if (upCount % 4 === 3) {
+      currentShape[0] = playerId + width - 1
+      currentShape[1] = playerId + width
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + width + 1
+    } else if (upCount % 4 === 0) { // default position 
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId
+      currentShape[2] = playerId + width
+      currentShape[3] = playerId + width + 1
+    }
+    currentShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
+  }
+
 
   function checkShape(currentShape) {
     let isUsed = true
@@ -117,6 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
       case 38: //UP changes position
         upCount ++
         if (currentShape === zShape) return zShapeUp(upCount)
+        if (currentShape === sShape) return sShapeUp(upCount)
+        if (currentShape === lShape) return lShapeUp(upCount)
         break
 
       case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
