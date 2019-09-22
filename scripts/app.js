@@ -11,26 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let zShape = new Array
   let sShape = new Array
   let lShape = new Array
-  let playerId = 0
 
   //OTHER VARS
-  let usedDivs = new Array
+  const usedDivs = new Array
   let upCount = 0
-
-
-  //const tempArr = new Array
-
-  // const zShape = {
-  //   position1: [3, 4, 14, 15]
-  //   position2: [] 
-  // }
-
-  //SHAPES
-  // zShape
-  // zShape[0] = playerIdx - 1
-  // zShape[1] = playerIdx
-  // zShape[2] = playerIdx - width
-  // zShape[3] = playerIdx - width - 1
 
 
   //CREATES GRID ***** DO NOT TOUCH *****
@@ -42,8 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //CREATES GRID ***** DO NOT TOUCH *****
 
+
+  //*******************************FUNCTIONS */
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
+    console.log('its here')
     allShapes = []
     zShape = [3,4,14,15]
     sShape = [13,4,14,5]
@@ -58,19 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //DRAWS EVERY NEW SHAPE  
   function drawShape(allShapes) {
-    //console.log(allShapes)
     currentShape = allShapes[Math.floor(Math.random() * 3 )]
-    console.log(currentShape)
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
   }
-  //drawShape()
+
 
   //ALL zSHAPE POSITIONS // position ===1 [dbca] ===0 [abcd]
   function zShapeUp(upCount) {
     const playerId = currentShape[1]
-    console.log(playerId)
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -79,82 +63,78 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape[1] = playerId
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width
-      console.log(currentShape)
     } else {
       currentShape[0] = playerId - 1
       currentShape[1] = playerId
       currentShape[2] = playerId + width
       currentShape[3] = currentShape[2] + 1
-      console.log(currentShape)
     }
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
   }
 
+  function checkShape(currentShape) {
+    let isUsed = true
+    if (usedDivs.includes(currentShape[0] + width)) return isDivUsed(currentShape, isUsed)
+    if (usedDivs.includes(currentShape[1] + width)) return isDivUsed(currentShape, isUsed)
+    if (usedDivs.includes(currentShape[2] + width)) return isDivUsed(currentShape, isUsed)
+    if (usedDivs.includes(currentShape[3] + width)) return isDivUsed(currentShape, isUsed)
+  }
+  
+  function isDivUsed(currentShape, isUsed) {
+    console.log('isDivUsed')
+    if (isUsed === true) {
+      currentShape.forEach(element => {
+        cells[element].classList.add('used')
+        cells[element].classList.remove('player')
+        usedDivs.push(element)
+      })
+    }
+    return shapeArr()
+  }
 
 
-  //EVENT LISTENERS
+
+  //*************************************************EVENT LISTENERS
   //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keyup', (e) => {
     
-    let isUsed = false
-    let rightLeft = true
     let tempArr = new Array
 
     switch (e.keyCode) {
       case 37: //LEFT
         tempArr = currentShape.filter(element => element % width > 0)
-        console.log(tempArr)
         if (tempArr.length === 4) {
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] -= 1
             cells[currentShape[i]].classList.add('player')
-            console.log(currentShape[i])
-            console.log(currentShape)
           }
         }
         break
 
-      case 38: //UP **** Take Away later cant move up 
+      case 38: //UP changes position
         upCount ++
-        console.log(upCount)
         if (currentShape === zShape) return zShapeUp(upCount)
         break
 
       case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
         tempArr = currentShape.filter(element => element % width < width - 1)
-        console.log(tempArr)
         if (tempArr.length === 4) {
           for (let i = currentShape.length - 1; i >= 0; i--) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] += 1
             cells[currentShape[i]].classList.add('player')
-            console.log(currentShape)
           }
         }
         break
 
-      case 40: //DOWN
-        isUsed = false
-        currentShape.forEach(element => {
-          console.log(element)
-          if (usedDivs.includes(element + width)) isUsed = true
-        })
+      case 40: //DOWN 
+        //CHECKS IF SHAPE IS IN USED DIVS ARRAY
+        checkShape(currentShape)
 
-        if (isUsed === true) {
-          currentShape.forEach(element => {
-            cells[element].classList.add('used')
-            cells[element].classList.remove('player')
-            usedDivs.push(element)
-            console.log(isUsed)
-            console.log(usedDivs)
-            isUsed = false
-            return shapeArr() // creates figure array and draws new shape
-          })
-        }
-
+        //Checks if shape hit the bottom 
         if ((Math.max(...currentShape) + width) < 200) {
           for (let i = currentShape.length - 1; i >= 0; i--) {
             cells[currentShape[i]].classList.remove('player')
@@ -179,6 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
+//First USED DIV   === went on  a wierd loop sometimes
+// currentShape.forEach(element => {
+//   console.log(element)
+//   if (usedDivs.includes(element + width)) return isDivUsed(currentShape, isUsed)
+// })
+
 //MOVING UP 
 // for (let i = 0; i < currentShape.length; i++) {
 //     cells[currentShape[i]].classList.remove('player')
@@ -188,7 +174,25 @@ document.addEventListener('DOMContentLoaded', () => {
 //     console.log(currentShape)
 //   }
 
+// //CHEAKS IF SHAPE IS IN USED DIVS ARRAY 
+// isUsed = false
+// currentShape.forEach(element => {
+//   console.log(element)
+//   if (usedDivs.includes(element + width)) isUsed = true
+// })
 
+// if (isUsed === true) {
+//   currentShape.forEach(element => {
+//     cells[element].classList.add('used')
+//     cells[element].classList.remove('player')
+//     usedDivs.push(element)
+
+//     console.log(isUsed)
+//     console.log(usedDivs)
+//     isUsed = false
+//     return shapeArr() // creates figure array and draws new shape
+//   })
+// }
 
 // usedDivs.some((index) => {
 //   zShape.forEach(element => {
