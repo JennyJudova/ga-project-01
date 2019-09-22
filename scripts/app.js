@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let zShape = new Array
   let sShape = new Array
   let lShape = new Array
+  let l2Shape = new Array
 
   //OTHER VARS
   const usedDivs = new Array
@@ -35,9 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
     zShape = [3,4,14,15]
     sShape = [13,4,14,5]
     lShape = [4,14,24,25]
+    l2Shape = [4,14,23,24]
     allShapes.push(zShape)
     allShapes.push(sShape)
     allShapes.push(lShape)
+    allShapes.push(l2Shape)
     drawShape(allShapes)
   }
   shapeArr()
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //DRAWS EVERY NEW SHAPE  
   function drawShape(allShapes) {
-    currentShape = allShapes[Math.floor(Math.random() * 3 )]
+    currentShape = allShapes[Math.floor(Math.random() * 4 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
@@ -129,6 +132,38 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  //ALL l2Shape POSITIONS // ******** CHANGE 
+  function lShapeUp2(upCount) {
+    const playerId = currentShape[1]
+    currentShape.forEach(element => {
+      cells[element].classList.remove('player')
+    })
+    if (upCount % 4 === 1) {
+      currentShape[0] = playerId - width - 1 
+      currentShape[1] = playerId - 1
+      currentShape[2] = playerId
+      currentShape[3] = playerId + 1
+    } else if (upCount % 4 === 2) {   
+      currentShape[0] = playerId - width + 1
+      currentShape[1] = playerId - width + 2
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + width + 1
+    } else if (upCount % 4 === 3) {
+      currentShape[0] = playerId + width - 2
+      currentShape[1] = playerId + width - 1
+      currentShape[2] = playerId + width
+      currentShape[3] = playerId + width + width 
+    } else if (upCount % 4 === 0) { // default position 
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId
+      currentShape[2] = playerId + width - 1
+      currentShape[3] = playerId + width
+    }
+    currentShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
+  }
+
 
   function checkShape(currentShape) {
     let isUsed = true
@@ -175,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentShape === zShape) return zShapeUp(upCount)
         if (currentShape === sShape) return sShapeUp(upCount)
         if (currentShape === lShape) return lShapeUp(upCount)
+        if (currentShape === l2Shape) return lShapeUp2(upCount)
         break
 
       case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
