@@ -244,41 +244,54 @@ document.addEventListener('DOMContentLoaded', () => {
         cells[element].classList.remove('player')
         usedDivs.push(element)
       })
+      rowCheck(usedDivs)
     }
-    rowCheck(usedDivs)
     return shapeArr()
   }
 
   //CHECK ROW
   function rowCheck(usedDivs) {
-    let tempArr = new Array
-    //usedDivs.sort((a, b) => b - a) // sorts usedDivs array from big to large
-    const yMin = Math.floor(Math.min(...usedDivs) / width)
-    for (let tempY = hight - 1; tempY >= yMin; tempY--) {
-      tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
-      if (tempArr.length === width) { 
-        console.log(tempArr)
-        tempArr.forEach(element => {
-          cells[element].classList.remove('used')
-        })
-        usedDivs.forEach(element => {
-          cells[element].classList.remove('used')
-        })
 
-        usedDivs = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
-        console.log(usedDivs)
-        usedDivs = usedDivs.map(div => div + width)
-        console.log(usedDivs)
-        
-        usedDivs.forEach(element => {
-          cells[element].classList.add('used')
-        })
-        // usedDivs = usedDivs.filter((div) => {
-        //   Math.floor(((div) / width) !== tempY)
-        //   div.classList.remove('used')
-        // })
-      }
+    let tempArr = new Array
+    let tempY = hight - 1
+    const yMin = Math.floor(Math.min(...usedDivs) / width)
+
+
+    for (tempY = hight - 1; tempY >= yMin; tempY--) {
+      tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
+      if (tempArr.length === width) deleteRow(tempArr, usedDivs, tempY) 
     } 
+  }
+
+  function deleteRow(tempArr, usedDivs, tempY) {
+    let element = new Number
+    let tempDivArr = new Array
+    usedDivs.sort((a, b) => b - a)
+
+    for (let i = 0; i < usedDivs.length; i ++) {
+      element = usedDivs[i]
+      console.log(element)
+      cells[element].classList.remove('used')
+    }
+
+    tempDivArr = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
+    console.log(usedDivs)
+
+    for (let i = 0; i < tempDivArr.length; i ++) {
+      element = tempDivArr[i]
+      if (Math.floor(element / width) < tempY) {
+        tempDivArr[i] = element + width
+        cells[element + width].classList.add('used')
+        console.log('If 297')
+      } else cells[element].classList.add('used')
+    }
+
+    console.log(usedDivs)
+    console.log(tempDivArr)
+    
+    usedDivs = tempDivArr
+    console.log(tempY)
+    console.log(usedDivs)
   }
 
 
@@ -351,6 +364,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+
+// tempArr.forEach(element => {
+//   cells[element].classList.remove('used')
+// })
+
+//WORKING
+// usedDivs.forEach(element => {
+//   cells[element].classList.remove('used')
+// })
+
+
+//OLD ROW CHECK
+/*      { 
+
+        tempArr.forEach(element => {
+          cells[element].classList.remove('used')
+        })
+        usedDivs.forEach(element => {
+          cells[element].classList.remove('used')
+        })
+        usedDivs = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
+        console.log(usedDivs)
+        usedDivs = usedDivs.map(div => div + width)
+        console.log(usedDivs)
+        usedDivs.forEach(element => {
+          cells[element].classList.add('used')
+        })
+      }
+*/
 
 ///Original isDivUsed function
 // function isDivUsed(currentShape, isUsed) {
