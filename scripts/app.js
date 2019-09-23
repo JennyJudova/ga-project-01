@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let l2Shape = new Array
   let tShape = new Array
   let sqShape = new Array
+  let iShape = new Array
 
   //OTHER VARS
   const usedDivs = new Array
@@ -41,12 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
     l2Shape = [4,14,23,24]
     tShape = [13,4,14,15]
     sqShape = [4,5,14,15]
+    iShape = [3,4,5,6]
     allShapes.push(zShape)
     allShapes.push(sShape)
     allShapes.push(lShape)
     allShapes.push(l2Shape)
     allShapes.push(tShape)
     allShapes.push(sqShape)
+    allShapes.push(iShape)
     drawShape(allShapes)
   }
   shapeArr()
@@ -54,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //DRAWS EVERY NEW SHAPE  
   function drawShape(allShapes) {
-    currentShape = allShapes[Math.floor(Math.random() * 6 )]
+    currentShape = allShapes[Math.floor(Math.random() * 7 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape[0] = playerId - 1
       currentShape[1] = playerId
       currentShape[2] = playerId + width
-      currentShape[3] = currentShape[2] + 1
+      currentShape[3] = playerId + width + 1
     }
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -170,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  //ALL tShape POSITIONS // ******** CHANGE 
+  //ALL tShape POSITIONS // 
   function tShapeUp(upCount) {
     const playerId = currentShape[1]
     currentShape.forEach(element => {
@@ -196,6 +199,28 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape[1] = playerId
       currentShape[2] = playerId + width
       currentShape[3] = playerId + width + 1
+    }
+    currentShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
+  }
+
+  //ALL iShape POSITIONS
+  function iShapeUp(upCount) {
+    const playerId = currentShape[1]
+    currentShape.forEach(element => {
+      cells[element].classList.remove('player')
+    })
+    if (upCount % 2 === 1) {
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId 
+      currentShape[2] = playerId + width
+      currentShape[3] = playerId + width + width
+    } else { // default position 
+      currentShape[0] = playerId - 1
+      currentShape[1] = playerId
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + 1 + 1
     }
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -252,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentShape === lShape) return lShapeUp(upCount)
         if (currentShape === l2Shape) return lShapeUp2(upCount)
         if (currentShape === tShape) return tShapeUp(upCount)
+        if (currentShape === iShape) return iShapeUp(upCount)
         break
 
       case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
