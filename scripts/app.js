@@ -17,14 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let iShape = new Array
 
   //OTHER VARS
-  const usedDivs = new Array
+  let usedDivs = new Array
   let upCount = 0
 
 
   //CREATES GRID ***** DO NOT TOUCH *****
   for (let i = 0; i < width * hight; i++) {
     const cell = document.createElement('DIV')
-    //cell.addEventListener('click', handleClick)
     grid.appendChild(cell)
     cells.push(cell)
   }
@@ -34,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //*******************************FUNCTIONS */
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
-    console.log('its here')
+    console.log(usedDivs)
+
     allShapes = []
     zShape = [3,4,14,15]
     sShape = [13,4,14,5]
@@ -52,11 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
     allShapes.push(iShape)
     drawShape(allShapes)
   }
+  console.log(usedDivs)
   shapeArr()
 
 
   //DRAWS EVERY NEW SHAPE  
   function drawShape(allShapes) {
+    console.log('New Shape Here')
+    console.log(usedDivs)
     currentShape = allShapes[Math.floor(Math.random() * 7 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -229,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //CHECKS if the next step will make it collide with the used divs when going Down
   function checkShape(currentShape) {
+    console.log(usedDivs)
     const isUsed = true
     if (usedDivs.includes(currentShape[0] + width)) return isDivUsed(currentShape, isUsed)
     if (usedDivs.includes(currentShape[1] + width)) return isDivUsed(currentShape, isUsed)
@@ -238,32 +242,43 @@ document.addEventListener('DOMContentLoaded', () => {
   
   function isDivUsed(currentShape, isUsed) {
     console.log('isDivUsed')
+    console.log(usedDivs)
     if (isUsed === true) {
       currentShape.forEach(element => {
         cells[element].classList.add('used')
         cells[element].classList.remove('player')
         usedDivs.push(element)
       })
-      rowCheck(usedDivs)
+      console.log(usedDivs)
+      usedDivs = rowCheck(usedDivs)
+      console.log(usedDivs)
     }
-    return shapeArr()
+    console.log(usedDivs)
+    shapeArr()
   }
 
   //CHECK ROW
   function rowCheck(usedDivs) {
-
+    console.log(usedDivs)
     let tempArr = new Array
-    let tempY = hight - 1
+    //let tempY = hight - 1
     const yMin = Math.floor(Math.min(...usedDivs) / width)
 
 
-    for (tempY = hight - 1; tempY >= yMin; tempY--) {
+    for (let tempY = hight - 1; tempY >= yMin; tempY--) {
       tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
-      if (tempArr.length === width) deleteRow(tempArr, usedDivs, tempY) 
-    } 
+      if (tempArr.length >= width){
+        usedDivs = deleteRow(tempArr, usedDivs, tempY)
+      }
+      console.log(usedDivs)
+    }
+    console.log(usedDivs)
+    return usedDivs
   }
 
   function deleteRow(tempArr, usedDivs, tempY) {
+
+    console.log(usedDivs)
     let element = new Number
     let tempDivArr = new Array
     usedDivs.sort((a, b) => b - a)
@@ -275,11 +290,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     tempDivArr = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
-    console.log(usedDivs)
+    console.log(tempDivArr)
 
     for (let i = 0; i < tempDivArr.length; i ++) {
       element = tempDivArr[i]
-      if (Math.floor(element / width) < tempY) {
+      if (Math.floor(element / width) < tempY + 1) {
         tempDivArr[i] = element + width
         cells[element + width].classList.add('used')
         console.log('If 297')
@@ -292,13 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
     usedDivs = tempDivArr
     console.log(tempY)
     console.log(usedDivs)
+
+    return usedDivs
   }
 
 
 
   //*************************************************EVENT LISTENERS
   //MOVESHAPE LEFT // RIGHT // DOWN 
-  document.addEventListener('keyup', (e) => {
+  document.addEventListener('keydown', (e) => {
     
     let tempArr = new Array
 
@@ -337,7 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 40: //DOWN 
         //CHECKS IF SHAPE IS IN USED DIVS ARRAY
+        console.log('keydown')
+        console.log(usedDivs)
         checkShape(currentShape)
+        console.log(usedDivs)
 
         //Checks if shape hit the bottom 
         if ((Math.max(...currentShape) + width) < 200) {
@@ -345,19 +365,19 @@ document.addEventListener('DOMContentLoaded', () => {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] += width
             cells[currentShape[i]].classList.add('player')
-            console.log(currentShape)
           }
         } else { //DROPS shape to a used array 
           currentShape.forEach(element => {
             cells[element].classList.add('used')
             cells[element].classList.remove('player')
             usedDivs.push(element)
-            console.log(usedDivs)
           })
-          rowCheck(usedDivs)
-          return shapeArr() // creates figure array and draws new shape
+          console.log(usedDivs)
+          usedDivs = rowCheck(usedDivs)
+          console.log(usedDivs)
+          shapeArr() // creates figure array and draws new shape
         }
-        break
+
     }
   })
 
