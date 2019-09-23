@@ -227,11 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-
-
   //CHECKS if the next step will make it collide with the used divs when going Down
   function checkShape(currentShape) {
-    let isUsed = true
+    const isUsed = true
     if (usedDivs.includes(currentShape[0] + width)) return isDivUsed(currentShape, isUsed)
     if (usedDivs.includes(currentShape[1] + width)) return isDivUsed(currentShape, isUsed)
     if (usedDivs.includes(currentShape[2] + width)) return isDivUsed(currentShape, isUsed)
@@ -247,7 +245,40 @@ document.addEventListener('DOMContentLoaded', () => {
         usedDivs.push(element)
       })
     }
+    rowCheck(usedDivs)
     return shapeArr()
+  }
+
+  //CHECK ROW
+  function rowCheck(usedDivs) {
+    let tempArr = new Array
+    //usedDivs.sort((a, b) => b - a) // sorts usedDivs array from big to large
+    const yMin = Math.floor(Math.min(...usedDivs) / width)
+    for (let tempY = hight - 1; tempY >= yMin; tempY--) {
+      tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
+      if (tempArr.length === width) { 
+        console.log(tempArr)
+        tempArr.forEach(element => {
+          cells[element].classList.remove('used')
+        })
+        usedDivs.forEach(element => {
+          cells[element].classList.remove('used')
+        })
+
+        usedDivs = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
+        console.log(usedDivs)
+        usedDivs = usedDivs.map(div => div + width)
+        console.log(usedDivs)
+        
+        usedDivs.forEach(element => {
+          cells[element].classList.add('used')
+        })
+        // usedDivs = usedDivs.filter((div) => {
+        //   Math.floor(((div) / width) !== tempY)
+        //   div.classList.remove('used')
+        // })
+      }
+    } 
   }
 
 
@@ -310,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             usedDivs.push(element)
             console.log(usedDivs)
           })
+          rowCheck(usedDivs)
           return shapeArr() // creates figure array and draws new shape
         }
         break
@@ -318,6 +350,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 })
+
+
+///Original isDivUsed function
+// function isDivUsed(currentShape, isUsed) {
+//   console.log('isDivUsed')
+//   if (isUsed === true) {
+//     currentShape.forEach(element => {
+//       cells[element].classList.add('used')
+//       cells[element].classList.remove('player')
+//       usedDivs.push(element)
+//     })
+//   }
+//   return shapeArr()
+// } 
+
 
 
 //First USED DIV   === went on  a wierd loop sometimes
