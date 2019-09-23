@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let sShape = new Array
   let lShape = new Array
   let l2Shape = new Array
+  let tShape = new Array
+  let sqShape = new Array
 
   //OTHER VARS
   const usedDivs = new Array
@@ -37,10 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
     sShape = [13,4,14,5]
     lShape = [4,14,24,25]
     l2Shape = [4,14,23,24]
+    tShape = [13,4,14,15]
+    sqShape = [4,5,14,15]
     allShapes.push(zShape)
     allShapes.push(sShape)
     allShapes.push(lShape)
     allShapes.push(l2Shape)
+    allShapes.push(tShape)
+    allShapes.push(sqShape)
     drawShape(allShapes)
   }
   shapeArr()
@@ -48,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //DRAWS EVERY NEW SHAPE  
   function drawShape(allShapes) {
-    currentShape = allShapes[Math.floor(Math.random() * 4 )]
+    currentShape = allShapes[Math.floor(Math.random() * 6 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
@@ -132,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  //ALL l2Shape POSITIONS // ******** CHANGE 
+  //ALL l2Shape POSITIONS //
   function lShapeUp2(upCount) {
     const playerId = currentShape[1]
     currentShape.forEach(element => {
@@ -164,7 +170,41 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  //ALL tShape POSITIONS // ******** CHANGE 
+  function tShapeUp(upCount) {
+    const playerId = currentShape[1]
+    currentShape.forEach(element => {
+      cells[element].classList.remove('player')
+    })
+    if (upCount % 4 === 1) {
+      currentShape[0] = playerId - width - 1
+      currentShape[1] = playerId - 1
+      currentShape[2] = playerId 
+      currentShape[3] = playerId + width - 1
+    } else if (upCount % 4 === 2) {   
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId + 1 - width
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + 1 - width + 1
+    } else if (upCount % 4 === 3) {
+      currentShape[0] = playerId + width - width + 1
+      currentShape[1] = playerId + width
+      currentShape[2] = playerId + width + 1
+      currentShape[3] = playerId + width + width + 1
+    } else if (upCount % 4 === 0) { // default position 
+      currentShape[0] = playerId + width - 1
+      currentShape[1] = playerId
+      currentShape[2] = playerId + width
+      currentShape[3] = playerId + width + 1
+    }
+    currentShape.forEach(element => {
+      cells[element].classList.add('player')
+    })
+  }
 
+
+
+  //CHECKS if the next step will make it collide with the used divs when going Down
   function checkShape(currentShape) {
     let isUsed = true
     if (usedDivs.includes(currentShape[0] + width)) return isDivUsed(currentShape, isUsed)
@@ -211,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentShape === sShape) return sShapeUp(upCount)
         if (currentShape === lShape) return lShapeUp(upCount)
         if (currentShape === l2Shape) return lShapeUp2(upCount)
+        if (currentShape === tShape) return tShapeUp(upCount)
         break
 
       case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
