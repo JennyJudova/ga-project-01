@@ -29,8 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //CREATES GRID ***** DO NOT TOUCH *****
 
-  //Stars Game 
+  //Starts Game 
   shapeArr()
+
+  // //DROPS CURRENT SHAPE 
+  // let shapeDrop = setInterval(function() { 
+  //   checkShape(currentShape)
+  //   checkBtmCollision(currentShape)
+  // }, 
+  // 500) // CHANGE SPEED 
 
   //********************************************** FUNCTIONS ***************************************/
   //CREATES AN ARRAY OF ALL SHAPES
@@ -62,13 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[element].classList.add('player')
     })
   }
-
-  //DROPS CURRENT SHAPE 
-  let shapeDrop = setInterval(function() { 
-    checkShape(currentShape)
-    checkBtmCollision(currentShape)
-  }, 
-  300);
 
 
   //ALL SHAPES
@@ -329,7 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     switch (e.keyCode) {
       case 37: //LEFT
-        tempArr = currentShape.filter(element => element % width > 0)
+        //Check before going left that all elements in array are within the board & for colission to the left
+        tempArr = currentShape.filter(element => element % width > 0).filter(element => usedDivs.includes(element - 1) === false) 
         if (tempArr.length === 4) {
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
@@ -349,8 +350,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentShape === iShape) return iShapeUp(upCount)
         break
 
-      case 39: //RIGHT case 39: if (x < width - 1) playerIdx += 1 //RIGHT
-        tempArr = currentShape.filter(element => element % width < width - 1)
+      case 39: //RIGHT
+        //Check before going right that all elements in array are within the board & for colission to the right
+        tempArr = currentShape.filter(element => element % width < width - 1).filter(element => usedDivs.includes(element + 1) === false) 
         if (tempArr.length === 4) {
           for (let i = currentShape.length - 1; i >= 0; i--) {
             cells[currentShape[i]].classList.remove('player')
@@ -360,28 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         break
 
+
       case 40: //DOWN 
         //CHECKS IF SHAPE IS IN USED DIVS ARRAY
         console.log('keydown')
         checkShape(currentShape)
         checkBtmCollision(currentShape)
-
-        // //Checks if shape hit the bottom 
-        // if ((Math.max(...currentShape) + width) < width * hight) {
-        //   for (let i = currentShape.length - 1; i >= 0; i--) {
-        //     cells[currentShape[i]].classList.remove('player')
-        //     currentShape[i] += width
-        //     cells[currentShape[i]].classList.add('player')
-        //   }
-        // } else { //DROPS shape to a used array 
-        //   currentShape.forEach(element => {
-        //     cells[element].classList.add('used')
-        //     cells[element].classList.remove('player')
-        //     usedDivs.push(element)
-        //   })
-        //   usedDivs = rowCheck(usedDivs)
-        //   shapeArr() // creates figure array and draws new shape
-        // }
     }
   })
 
