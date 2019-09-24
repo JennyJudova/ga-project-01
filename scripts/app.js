@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   //GRID variables
   const width = 10
-  const hight = 20
+  const hight = 22
   const grid = document.querySelector('.grid')
   const cells = []
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let usedDivs = new Array
   let upCount = 0
 
-
+  //************************************************ GAME *******************************************/ 
   //CREATES GRID ***** DO NOT TOUCH *****
   for (let i = 0; i < width * hight; i++) {
     const cell = document.createElement('DIV')
@@ -29,12 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //CREATES GRID ***** DO NOT TOUCH *****
 
+  //Stars Game 
+  shapeArr()
 
-  //*******************************FUNCTIONS */
+  //********************************************** FUNCTIONS ***************************************/
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
-    console.log(usedDivs)
-
     allShapes = []
     zShape = [3,4,14,15]
     sShape = [13,4,14,5]
@@ -52,11 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     allShapes.push(iShape)
     drawShape(allShapes)
   }
-  console.log(usedDivs)
-  shapeArr()
 
-
-  //DRAWS EVERY NEW SHAPE  
+  //DRAWS EVERY NEW CURRENT SHAPE  
   function drawShape(allShapes) {
     console.log('New Shape Here')
     console.log(usedDivs)
@@ -66,8 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  //DROPS CURRENT SHAPE 
+  let shapeDrop = setInterval(function() { 
+    checkShape(currentShape)
+    checkBtmCollision(currentShape)
+  }, 
+  300);
+
 
   //ALL SHAPES
+
   //ALL zSHAPE POSITIONS // position ===1 [dbca] ===0 [abcd]
   function zShapeUp(upCount) {
     const playerId = currentShape[1]
@@ -230,6 +235,27 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  //COLLISION FUNCTIONS
+
+  //CHECKS BOTTOM COLLISION
+  function checkBtmCollision(currentShape) {
+    if ((Math.max(...currentShape) + width) < width * hight) {
+      for (let i = currentShape.length - 1; i >= 0; i--) {
+        cells[currentShape[i]].classList.remove('player')
+        currentShape[i] += width
+        cells[currentShape[i]].classList.add('player')
+      }
+    } else { //DROPS shape to a used array 
+      currentShape.forEach(element => {
+        cells[element].classList.add('used')
+        cells[element].classList.remove('player')
+        usedDivs.push(element)
+      })
+      usedDivs = rowCheck(usedDivs)
+      shapeArr() // creates figure array and draws new shape
+    }
+  }
+
   //CHECKS if the next step will make it collide with the used divs when going Down
   function checkShape(currentShape) {
     const isUsed = true
@@ -239,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (usedDivs.includes(currentShape[3] + width)) return isDivUsed(currentShape, isUsed)
   }
   
+  //CHECKS if div is 'used' for colission
   function isDivUsed(currentShape, isUsed) {   // Is Div Used -> Row Check -> delete Row (used divs is passed from Delete Row back to Is Div Used. Is DIv Used calls the Shape Arr)
     console.log('isDivUsed')
     if (isUsed === true) {
@@ -268,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return usedDivs
   }
 
+  //Deletes used rows 
   function deleteRow(tempArr, usedDivs, tempY) {
     let element = new Number
     let tempDivArr = new Array
@@ -293,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  //*************************************************EVENT LISTENERS
+  //************************************************************ EVENT LISTENERS *****************************************/
   //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keydown', (e) => {
     
@@ -336,23 +364,24 @@ document.addEventListener('DOMContentLoaded', () => {
         //CHECKS IF SHAPE IS IN USED DIVS ARRAY
         console.log('keydown')
         checkShape(currentShape)
+        checkBtmCollision(currentShape)
 
-        //Checks if shape hit the bottom 
-        if ((Math.max(...currentShape) + width) < 200) {
-          for (let i = currentShape.length - 1; i >= 0; i--) {
-            cells[currentShape[i]].classList.remove('player')
-            currentShape[i] += width
-            cells[currentShape[i]].classList.add('player')
-          }
-        } else { //DROPS shape to a used array 
-          currentShape.forEach(element => {
-            cells[element].classList.add('used')
-            cells[element].classList.remove('player')
-            usedDivs.push(element)
-          })
-          usedDivs = rowCheck(usedDivs)
-          shapeArr() // creates figure array and draws new shape
-        }
+        // //Checks if shape hit the bottom 
+        // if ((Math.max(...currentShape) + width) < width * hight) {
+        //   for (let i = currentShape.length - 1; i >= 0; i--) {
+        //     cells[currentShape[i]].classList.remove('player')
+        //     currentShape[i] += width
+        //     cells[currentShape[i]].classList.add('player')
+        //   }
+        // } else { //DROPS shape to a used array 
+        //   currentShape.forEach(element => {
+        //     cells[element].classList.add('used')
+        //     cells[element].classList.remove('player')
+        //     usedDivs.push(element)
+        //   })
+        //   usedDivs = rowCheck(usedDivs)
+        //   shapeArr() // creates figure array and draws new shape
+        // }
     }
   })
 
