@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // }, 
   // 500) // CHANGE SPEED 
 
+
   //********************************************** FUNCTIONS ***************************************/
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
@@ -71,9 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  //ALL SHAPES
+  //ALL SHAPES & POSITIONS
 
-  //ALL zSHAPE POSITIONS // position ===1 [dbca] ===0 [abcd]
+  //Get Player ID
+  function getPlayerId() {
+    let playerId = new Number
+    if (currentShape[1] % width === width - 1) {
+      return playerId = currentShape[1] - 1 //RIGHT wall check
+    } else if (currentShape[1] % width === 0) {
+      return playerId = currentShape[1] + 1 // LEFT Wall check
+    } else return playerId = currentShape[1]
+  }
+
+  //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
     const playerId = currentShape[1]
     currentShape.forEach(element => {
@@ -119,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL lShapeUp POSITIONS //
   function lShapeUp(upCount) {
-    const playerId = currentShape[1]
+    const playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -151,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL l2Shape POSITIONS //
   function lShapeUp2(upCount) {
-    const playerId = currentShape[1]
+    const playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -215,7 +226,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL iShape POSITIONS
   function iShapeUp(upCount) {
-    const playerId = currentShape[1]
+    let playerId = new Number
+
+    if (currentShape[1] % width === width - 1) {
+      playerId = currentShape[1] - 2 //RIGHT wall check
+    } else if (currentShape[1] % width === 0) {
+      playerId = currentShape[1] + 1 // LEFT Wall check
+    } else playerId = currentShape[1]
+
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
