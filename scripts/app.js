@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   //GRID variables
   const width = 10
-  const hight = 22
+  const hight = 25
   const grid = document.querySelector('.grid')
   const cells = []
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //OTHER VARS
   let usedDivs = new Array
   let upCount = 0
-  let currentScore = 0
+  let currentScore = new Number
   let level = 0
   let linesDeleted = 0
   let startSpeed = 500
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[i].innerHTML = ''
       cells[i].classList.remove('used')
       cells[i].classList.remove('player')
-      cells[i].classList.add('black')
+      cells[i].classList.add('start')
 
       cells[22].innerHTML = 'PR'
       cells[23].innerHTML = 'ES'
@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[i].classList.remove('used')
       cells[i].classList.remove('player')
       cells[i].classList.remove('black')
+      cells[i].classList.remove('start')
     }
 
     //FIRST LINE 
@@ -182,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentScore > 99) { // Updates Score
       level = level + 1
+      startSpeed = startSpeed / 2
       currentScore = currentScore - 100
     }
     cells[width - 1].innerHTML = currentScore
@@ -210,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
-    const playerId = currentShape[1]
+    const playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -232,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL sSHAPE POSITIONS //
   function sShapeUp(upCount) {
-    const playerId = currentShape[1]
+    const playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
