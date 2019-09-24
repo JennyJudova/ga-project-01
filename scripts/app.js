@@ -19,8 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   //OTHER VARS
   let usedDivs = new Array
   let upCount = 0
+  let currentScore = 0
+  let level = 0
+  let linesDeleted = 0
+  let startSpeed = 500
 
-  //************************************************ GAME *******************************************/ 
+  /************************************************ GAME *******************************************/ 
+
   //CREATES GRID ***** DO NOT TOUCH *****
   for (let i = 0; i < width * hight; i++) {
     const cell = document.createElement('DIV')
@@ -28,19 +33,129 @@ document.addEventListener('DOMContentLoaded', () => {
     cells.push(cell)
   }
   //CREATES GRID ***** DO NOT TOUCH *****
-
-  //Starts Game 
-  shapeArr()
-
+      
+  startScreen()
+  
   // //DROPS CURRENT SHAPE 
-  // let shapeDrop = setInterval(function() { 
-  //   checkShape(currentShape)
-  //   checkBtmCollision(currentShape)
-  // }, 
-  // 500) // CHANGE SPEED 
+  const shapeDrop = setInterval(function() { 
+    checkShape(currentShape)
+    checkBtmCollision(currentShape)
+  }, startSpeed) // CHANGE SPEED 
 
+  /********************************************** FUNCTIONS ***************************************/
+  
+  //GAME START SCREEN 
+  function startScreen() {
+    for (let i = 0; i < width * hight; i++) {
+      cells[i].innerHTML = ''
+      cells[i].classList.remove('used')
+      cells[i].classList.remove('player')
+      cells[i].classList.add('black')
 
-  //********************************************** FUNCTIONS ***************************************/
+      cells[22].innerHTML = 'PR'
+      cells[23].innerHTML = 'ES'
+      cells[24].innerHTML = 'S '
+      cells[26].innerHTML = 'EN'
+      cells[27].innerHTML = 'TE'
+      cells[28].innerHTML = 'R '
+
+      cells[35].innerHTML = 'TO'
+      
+      cells[43].innerHTML = 'S'
+      cells[44].innerHTML = 'T'
+      cells[45].innerHTML = 'A'
+      cells[46].innerHTML = 'R'
+      cells[47].innerHTML = 'T'
+
+      cells[53].innerHTML = 'G'
+      cells[54].innerHTML = 'A'
+      cells[55].innerHTML = 'M'
+      cells[56].innerHTML = 'E'
+
+      cells[60].innerHTML = '*'
+      cells[61].innerHTML = '*'
+      cells[62].innerHTML = '*'
+      cells[63].innerHTML = '*'
+      cells[64].innerHTML = '*'
+      cells[65].innerHTML = '*'
+      cells[66].innerHTML = '*'
+      cells[67].innerHTML = '*'
+      cells[68].innerHTML = '*'
+      cells[69].innerHTML = '*'
+
+      cells[73].innerHTML = 'PR'
+      cells[74].innerHTML = 'ES'
+      cells[75].innerHTML = 'S '
+
+      cells[83].innerHTML = '"U'
+      cells[84].innerHTML = 'P"'
+      cells[85].innerHTML = ''
+      cells[86].innerHTML = 'TO'
+
+      cells[93].innerHTML = 'RO'
+      cells[94].innerHTML = 'TA'
+      cells[95].innerHTML = 'TE'
+
+      cells[100].innerHTML = '*'
+      cells[101].innerHTML = '*'
+      cells[102].innerHTML = '*'
+      cells[103].innerHTML = '*'
+      cells[104].innerHTML = '*'
+      cells[105].innerHTML = '*'
+      cells[106].innerHTML = '*'
+      cells[107].innerHTML = '*'
+      cells[108].innerHTML = '*'
+      cells[109].innerHTML = '*'
+
+      cells[113].innerHTML = 'PR'
+      cells[114].innerHTML = 'ES'
+      cells[115].innerHTML = 'S '
+
+      cells[123].innerHTML = 'SP'
+      cells[124].innerHTML = 'AC'
+      cells[125].innerHTML = 'E '
+
+      cells[133].innerHTML = 'FO'
+      cells[134].innerHTML = 'R '
+
+      cells[143].innerHTML = 'MU'
+      cells[144].innerHTML = 'SI'
+      cells[145].innerHTML = 'C '
+    }
+  }
+
+  //GAME SET UP 
+  function gameStart() {
+    upCount = 0
+    currentScore = 0
+    level = 0
+    usedDivs = []
+
+    for (let i = 0; i < width * hight; i++) {
+      cells[i].innerHTML = ''
+      cells[i].classList.remove('used')
+      cells[i].classList.remove('player')
+      cells[i].classList.remove('black')
+    }
+
+    //FIRST LINE 
+    for (let i = 0; i < width; i++) {
+      cells[i].classList.add('top')
+    }
+
+    cells[0].innerHTML = 'LE'
+    cells[1].innerHTML = 'VE'
+    cells[2].innerHTML = 'L '
+
+    cells[6].innerHTML = 'SC'
+    cells[7].innerHTML = 'OR'
+    cells[8].innerHTML = 'E '
+
+    //Starts Game 
+    shapeArr()
+  }
+  
+  
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
     allShapes = []
@@ -64,6 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
   //DRAWS EVERY NEW CURRENT SHAPE  
   function drawShape(allShapes) {
     console.log('New Shape Here')
+
+    if (currentScore > 99) { // Updates Score
+      level = level + 1
+      currentScore = currentScore - 100
+    }
+    cells[width - 1].innerHTML = currentScore
+    cells[3].innerHTML = level
+
+
     console.log(usedDivs)
     currentShape = allShapes[Math.floor(Math.random() * 7 )]
     currentShape.forEach(element => {
@@ -230,6 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentShape[1] % width === width - 1) {
       playerId = currentShape[1] - 2 //RIGHT wall check
+    } else if (currentShape[1] % width === width - 2) {
+      playerId = currentShape[1] - 1 //RIGHT wall check
     } else if (currentShape[1] % width === 0) {
       playerId = currentShape[1] + 1 // LEFT Wall check
     } else playerId = currentShape[1]
@@ -303,20 +429,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let tempArr = new Array
     const yMin = Math.floor(Math.min(...usedDivs) / width)
 
+    if (yMin === 1) return gameOver() 
+
     //Checks if a row has 10 in a row (it has to start from YMin not 0 do not change the 'for')
     for (let tempY = yMin; tempY <= hight - 1; tempY ++) {
       tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
       if (tempArr.length >= width){
-        usedDivs = deleteRow(tempArr, usedDivs, tempY)
+        linesDeleted ++
+        currentScore = currentScore + Math.floor(Math.random(1) * 15 )
+        usedDivs = deleteRow(usedDivs, tempY)
       }
     }
     return usedDivs
   }
 
   //Deletes used rows 
-  function deleteRow(tempArr, usedDivs, tempY) {
+  function deleteRow(usedDivs, tempY) {
     let element = new Number
-    let tempDivArr = new Array
     usedDivs.sort((a, b) => b - a)
 
     for (let i = 0; i < usedDivs.length; i ++) {
@@ -324,22 +453,62 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[element].classList.remove('used')
     }
 
-    tempDivArr = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
+    usedDivs = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
 
-    for (let i = 0; i < tempDivArr.length; i ++) {
-      element = tempDivArr[i]
+    for (let i = 0; i < usedDivs.length; i ++) {
+      element = usedDivs[i]
       if (Math.floor(element / width) < tempY + 1) {
-        tempDivArr[i] = element + width
+        usedDivs[i] = element + width
         cells[element + width].classList.add('used')
       } else cells[element].classList.add('used')
     }
-    usedDivs = tempDivArr
     return usedDivs
   }
 
 
+  //GAME OVER SCREEN 
+  function gameOver() {
+    for (let i = 0; i < width * hight; i++) {
 
-  //************************************************************ EVENT LISTENERS *****************************************/
+      cells[i].classList.remove('used')
+      cells[i].classList.remove('player')
+      cells[i].classList.add('black')
+
+      cells[63].innerHTML = 'G'
+      cells[64].innerHTML = 'A'
+      cells[65].innerHTML = 'M'
+      cells[66].innerHTML = 'E'
+
+      cells[73].innerHTML = 'O'
+      cells[74].innerHTML = 'V'
+      cells[75].innerHTML = 'E'
+      cells[76].innerHTML = 'R'
+
+      cells[92].innerHTML = '*'
+      cells[93].innerHTML = '*'
+      cells[94].innerHTML = '*'
+      cells[95].innerHTML = '*'
+      cells[96].innerHTML = '*'
+      cells[97].innerHTML = '*'
+
+      cells[103].innerHTML = 'PR'
+      cells[104].innerHTML = 'ES'
+      cells[105].innerHTML = 'S '
+
+      cells[113].innerHTML = 'EN'
+      cells[114].innerHTML = 'TE'
+      cells[115].innerHTML = 'R '
+
+      cells[123].innerHTML = 'TO'
+
+      cells[133].innerHTML = 'PL'
+      cells[134].innerHTML = 'AY'
+    }
+    clearInterval(shapeDrop)
+  }
+
+
+  /************************************************************ EVENT LISTENERS *****************************************/
   //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keydown', (e) => {
     
@@ -386,262 +555,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('keydown')
         checkShape(currentShape)
         checkBtmCollision(currentShape)
+        break
+      
+      case 13: //RESTART BUTTON
+        gameStart()
+        break
     }
   })
-
-
 })
-
-
-// tempArr.forEach(element => {
-//   cells[element].classList.remove('used')
-// })
-
-//WORKING
-// usedDivs.forEach(element => {
-//   cells[element].classList.remove('used')
-// })
-
-
-//OLD ROW CHECK
-/*      { 
-
-        tempArr.forEach(element => {
-          cells[element].classList.remove('used')
-        })
-        usedDivs.forEach(element => {
-          cells[element].classList.remove('used')
-        })
-        usedDivs = usedDivs.filter(div => Math.floor((div) / width) !== tempY)
-        console.log(usedDivs)
-        usedDivs = usedDivs.map(div => div + width)
-        console.log(usedDivs)
-        usedDivs.forEach(element => {
-          cells[element].classList.add('used')
-        })
-      }
-*/
-
-///Original isDivUsed function
-// function isDivUsed(currentShape, isUsed) {
-//   console.log('isDivUsed')
-//   if (isUsed === true) {
-//     currentShape.forEach(element => {
-//       cells[element].classList.add('used')
-//       cells[element].classList.remove('player')
-//       usedDivs.push(element)
-//     })
-//   }
-//   return shapeArr()
-// } 
-
-
-
-//First USED DIV   === went on  a wierd loop sometimes
-// currentShape.forEach(element => {
-//   console.log(element)
-//   if (usedDivs.includes(element + width)) return isDivUsed(currentShape, isUsed)
-// })
-
-//MOVING UP 
-// for (let i = 0; i < currentShape.length; i++) {
-//     cells[currentShape[i]].classList.remove('player')
-//     currentShape[i] -= width
-//     cells[currentShape[i]].classList.add('player')
-//     console.log(currentShape[i])
-//     console.log(currentShape)
-//   }
-
-// //CHEAKS IF SHAPE IS IN USED DIVS ARRAY 
-// isUsed = false
-// currentShape.forEach(element => {
-//   console.log(element)
-//   if (usedDivs.includes(element + width)) isUsed = true
-// })
-
-// if (isUsed === true) {
-//   currentShape.forEach(element => {
-//     cells[element].classList.add('used')
-//     cells[element].classList.remove('player')
-//     usedDivs.push(element)
-
-//     console.log(isUsed)
-//     console.log(usedDivs)
-//     isUsed = false
-//     return shapeArr() // creates figure array and draws new shape
-//   })
-// }
-
-// usedDivs.some((index) => {
-//   zShape.forEach(element => {
-//     cells[element].classList.add('used')
-//     cells[element].classList.remove('player')
-//     usedDivs.push(element)
-//     console.log(usedDivs)
-//     return drawShape() // draws new shape
-//   })
-// })
-
-// for (let i = 0; i < zShape.length; i++) {
-
-// }
-// function containsFalsey(array) {
-//   console.log(array)
-//   const falsy = [undefined, null, NaN, 0, '', 'false']
-//   const falsyCheck = array.some((string) => {
-//     return falsy.includes(string)
-//   })
-//   console.log(falsyCheck)
-//   return falsyCheck
-// }
-
-        
-
-// if (zShape.forEach(element => {
-//   usedDivs.includes(element + width)
-// })) {
-//   zShape.forEach(element => {
-//     cells[element].classList.add('used')
-//     cells[element].classList.remove('player')
-//     usedDivs.push(element)
-//     console.log(usedDivs)
-//   })
-// }
-
-// zShape.forEach(element => {
-//   usedDivs.includes(element)
-//   cells[element].classList.add('used')
-//   cells[element].classList.remove('player')
-//   usedDivs.push(element)
-//   console.log(usedDivs)
-// })
-
-
-// zShape.forEach(element => {
-//   cells[element].classList.add('player')
-// })
-
-
-
-
-//CHANGE SHAPE
-
-// const zShape = {
-//   position1: [3, 4, 14, 15]
-//   position2: [] 
-// }
-
-
-
-
-
-
-//if ((zShape.reduce((a, b) => a + b)) + width > 790) 
-
-//DISCARDED CODE
-
-// if (zShape.forEach(element => {
-//   zShape[element] + width > 200
-// })) 
-
-// if (e.keyCode === 37) {
-//   console.log(typeof zShape.index)
-
-//   for (let i = 0; i < zShape.length; i++) {
-//     cells[zShape[i]].classList.remove('player')
-//     zShape[i] -= 1
-//     cells[zShape[i]].classList.add('player')
-//     console.log(zShape[i])
-//     console.log(zShape)
-//   }
-// }
-
-
-
-
-//   zShape.index.forEach(element => {
-//     cells[element].classList.remove('player')
-//     console.log(zShape.index[element])
-//     zShape.index[element] -= 1
-//     console.log(zShape.index[element])
-//     console.log(zShape.index)
-//     cells[element].classList.add('player')
-//   }) 
-// } else console.log(e.keyCode)
-// console.log(typeof e.keyCode)
-
-//cells[playerIdx].classList.remove('player')
-//const x = playerIdx % width
-//const y = Math.floor(playerIdx / width)
-
-//const zShape = [(playerIdx - width - 1), playerIdx - width, playerIdx, playerIdx + 1]
-
-  
-// //ADDS PLAYER ON CLICK
-// function handleClick(e) {
-//   e.target.classList.add('player')
-// }
-
-
-
-// document.addEventListener('keyup', (e) => {
-//   cells[playerIdx].classList.remove('player')
-
-//   const x = playerIdx % width
-//   const y = Math.floor(playerIdx / width)
-
-//   switch (e.keyCode) {
-//     case 37: if (x > 0) playerIdx -= 1 //LEFT
-//       break
-//     case 38: if (y > 0) playerIdx -= width //UP
-//       break
-//     case 39: if (x < width - 1) playerIdx += 1 //RIGHT
-//       break
-//     case 40: if (y < hight - 1) playerIdx += width //DOWN
-//       break
-//   }
-//   cells[playerIdx].classList.add('player')
-// })
-
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   const width = 10
-//   const grid = document.querySelector('.grid')
-//   const cells = []
-//   let playerIdx = 0
-
-//   function handleClick(e) {
-//     e.target.classList.add('player')
-//   }
-
-//   for (let i = 0; i < width ** 2; i++) {
-//     const cell = document.createElement('DIV')
-
-//     cell.addEventListener('click', handleClick)
-
-//     grid.appendChild(cell)
-//     cells.push(cell)
-//   }
-
-//   cells[playerIdx].classList.add('player')
-
-//   document.addEventListener('keyup', (e) => {
-
-//     cells[playerIdx].classList.remove('player')
-//     const x = playerIdx % width
-//     const y = Math.floor(playerIdx / width)
-
-//     switch (e.keyCode) {
-//       case 37: if (x > 0) playerIdx -= 1
-//         break
-//       case 38: if (y > 0) playerIdx -= width
-//         break
-//       case 39: if (x < width - 1) playerIdx += 1
-//         break
-//       case 40: if (y < width - 1) playerIdx += width
-//         break
-//     }
-
-//     cells[playerIdx].classList.add('player')
-//   })
-// })

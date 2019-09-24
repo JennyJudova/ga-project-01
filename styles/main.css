@@ -14,6 +14,7 @@ body {
   height: 100vh;
   justify-content: center;
   margin: 0;
+  background-color: white;
 }
 
 .grid {
@@ -25,6 +26,7 @@ body {
   justify-content: center;
   max-height: 600px;
   max-width: 300px;
+  background-color: white;
 }
 
 .grid div {
@@ -32,10 +34,12 @@ body {
   flex-grow: 1;
   height: 5%;
   width: 10%;
+  background-color: white;
+  color: black;
 }
 
 .grid div.player {
-  background-color: darkblue; 
+  background-color: green; 
   background-size: 150px;
   background-position-x: 0;
   background-position-y: 0;
@@ -43,4 +47,15 @@ body {
 
 .grid div.used {
   background-color: black;
+}
+
+.grid div.top {
+  background-color: white;
+  border: none;
+}
+
+.grid div.black {
+  background-color: black;
+  border: 1px solid black;
+  color: red;
 }
