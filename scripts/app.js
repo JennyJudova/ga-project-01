@@ -17,11 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let tShape = new Array
   let sqShape = new Array
   let iShape = new Array
+  let shapesPlayed = 0
+  const shapeSpace = [21,22,23,24,25,31,32,33,34,35,41,42,43,44,36]
+  let nextShape = null
+  let nextShapeArr = []
 
   //OTHER VARS
   let usedDivs = new Array
   let upCount = 0
   let currentScore = new Number
+  let highestScore = 0 
+  let highestLevel = 0
   let level = 0
   let linesDeleted = 0
   let startSpeed = 500
@@ -170,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //FIRST LINE 
-    for (let i = 0; i < width; i++) {
+    for (let i = 0; i < width * 5; i++) {
       cells[i].classList.add('top')
     }
 
@@ -182,6 +188,16 @@ document.addEventListener('DOMContentLoaded', () => {
     cells[7].innerHTML = 'OR'
     cells[8].innerHTML = 'E '
 
+    cells[10].innerHTML = 'HI'
+    cells[11].innerHTML = 'GH'
+    cells[12].innerHTML = 'ES'
+    cells[13].innerHTML = 'T '
+
+    cells[16].innerHTML = 'LE'
+    cells[17].innerHTML = 'VE'
+    cells[18].innerHTML = 'L '
+    cells[19].innerHTML = highestLevel
+
     //Starts Game 
     shapeArr()
   }
@@ -190,13 +206,13 @@ document.addEventListener('DOMContentLoaded', () => {
   //CREATES AN ARRAY OF ALL SHAPES
   function shapeArr() {
     allShapes = []
-    zShape = [3,4,14,15]
-    sShape = [13,4,5,14]
-    lShape = [4,14,24,25]
-    l2Shape = [4,23,14,24] 
-    tShape = [13,4,14,15]
-    sqShape = [4,5,14,15]
-    iShape = [3,4,5,6]
+    zShape = [23,24,34,35] //[25,26,36,37] //[3,4,14,15]
+    sShape = [33,24,25,34]//[35,26,27,36]//[13,4,5,14]
+    lShape = [24,34,44,45] //[26,36,46,47]//[4,14,24,25]
+    l2Shape = [24,43,34,44]//[26,45,36,46]//[4,23,14,24] 
+    tShape = [33,24,34,35]//[35,26,36,37]//[13,4,14,15]
+    sqShape = [24,25,34,35]//[26,27,36,37]//[4,5,14,15]
+    iShape = [34,35,36,37]//[35,36,37,38]//[3,4,5,6]
     allShapes.push(zShape)
     allShapes.push(sShape)
     allShapes.push(lShape)
@@ -204,20 +220,49 @@ document.addEventListener('DOMContentLoaded', () => {
     allShapes.push(tShape)
     allShapes.push(sqShape)
     allShapes.push(iShape)
-    drawShape(allShapes)
+    //drawShape(allShapes)
+    nextShapeCheck(allShapes)
+  }
+
+//****************************************************FIX THIS */
+  function nextShapeCheck(allShapes) {
+
+    nextShape = allShapes[Math.floor(Math.random() * 7 )]
+    console.log(nextShape)
+    nextShapeArr.push(nextShape)
+    console.log(nextShapeArr)
+
+    if (shapesPlayed === 0) {
+      currentShape = allShapes[Math.floor(Math.random() * 7 )]
+    } else currentShape = nextShapeArr[shapesPlayed - 1] 
+
+    console.log(currentShape)
+
+    shapesPlayed ++
+    drawShape(nextShape, currentShape, shapesPlayed)
   }
 
   //DRAWS EVERY NEW CURRENT SHAPE  
-  function drawShape(allShapes) {
+  function drawShape(nextShapeArr, currentShape, shapesPlayed) {
     console.log('New Shape Here')
     scoreCheck()
-    //currentShape = tShape
-    currentShape = allShapes[Math.floor(Math.random() * 7 )]
+    
+    const drawNShape = nextShapeArr[shapesPlayed - 1].map(element => element - 2)
+
+    shapeSpace.forEach(element => {
+      cells[element].classList.remove('next')
+    })
+
+    drawNShape.forEach(element => {
+      cells[element].classList.add('next')
+    })
+
     currentShape.forEach(element => {
       cells[element].classList.add('player')
     })
   }
 
+  //****************************************************FIX THIS */
 
   //ALL SHAPES & POSITIONS
 
@@ -248,8 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
-    //playerId = getPlayerId()
-    playerId = currentShape[1]
+    playerId = getPlayerId()
+    //playerId = currentShape[1]
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -271,8 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL sSHAPE POSITIONS //
   function sShapeUp(upCount) {
-    playerId = currentShape[1]
-    //playerId = getPlayerId()
+    //playerId = currentShape[1]
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -520,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tempArr = new Array
     const yMin = Math.floor(Math.min(...usedDivs) / width)
 
-    if (yMin === 1) return gameOver() 
+    if (yMin <= 6) return gameOver() 
 
     //Checks if a row has 10 in a row (it has to start from YMin not 0 do not change the 'for')
     for (let tempY = yMin; tempY <= hight - 1; tempY ++) {
@@ -560,10 +605,16 @@ document.addEventListener('DOMContentLoaded', () => {
   //GAME OVER SCREEN 
   function gameOver() {
     gameEnd = true
+    if (highestLevel < level ) {
+      highestLevel = level
+      cells[19].innerHTML = highestLevel
+    }
+
     for (let i = 0; i < width * hight; i++) {
 
       cells[i].classList.remove('used')
       cells[i].classList.remove('player')
+      cells[i].classList.remove('next')
       cells[i].classList.add('black')
 
       cells[63].innerHTML = 'G'
@@ -591,11 +642,19 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[114].innerHTML = 'TE'
       cells[115].innerHTML = 'R '
 
-      cells[123].innerHTML = 'TO'
+    
+      cells[123].innerHTML = '*T'
+      cells[124].innerHTML = 'WI'
+      cells[125].innerHTML = 'CE'
+      cells[126].innerHTML = '*'
 
-      cells[133].innerHTML = 'PL'
-      cells[134].innerHTML = 'AY'
+
+      cells[133].innerHTML = 'TO'
+
+      cells[143].innerHTML = 'PL'
+      cells[144].innerHTML = 'AY'
     }
+    
     clearInterval(shapeDrop)
   }
 

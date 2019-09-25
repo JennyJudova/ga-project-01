@@ -54,14 +54,19 @@ body {
   border: none;
 }
 
+.grid div.start {
+  background-color: black;
+  border: 1px solid black;
+  color: 	#FFFAFA;
+}
+
+.grid div.next {
+  background-color: yellow;
+}
+
 .grid div.black {
   background-color: black;
   border: 1px solid black;
   color: red;
 }
 
-.grid div.start {
-  background-color: black;
-  border: 1px solid black;
-  color: 	#FFFAFA;
-}
