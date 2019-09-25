@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+  //GLOBAL VARIABLES
+
   //GRID variables
   const width = 10
   const hight = 25
@@ -23,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let level = 0
   let linesDeleted = 0
   let startSpeed = 500
+  let speed = 500
+  let playerId = new Number
+  let shapeDrop = null
+  let gameEnd = false
 
   /************************************************ GAME *******************************************/ 
 
@@ -35,15 +41,42 @@ document.addEventListener('DOMContentLoaded', () => {
   //CREATES GRID ***** DO NOT TOUCH *****
       
   startScreen()
-  
-  // //DROPS CURRENT SHAPE 
-  const shapeDrop = setInterval(function() { 
-    checkShape(currentShape)
-    checkBtmCollision(currentShape)
-  }, startSpeed) // CHANGE SPEED 
 
   /********************************************** FUNCTIONS ***************************************/
-  
+  //GAME PLAY 
+
+  // //DROPS CURRENT SHAPE 
+  function speedUpDrop() {
+    if (gameEnd) {
+      gameEnd = false
+      return
+    }
+    shapeDrop = setInterval(() => { 
+      console.log(speed)
+      console.log(startSpeed)
+      console.log(level)
+      if (speed < startSpeed) {
+        startSpeed = speed
+        clearInterval(shapeDrop)
+        speedUpDrop()
+      }
+      checkShape(currentShape)
+      checkBtmCollision(currentShape)
+    }, speed) // CHANGE SPEED 
+  }
+
+  //SCORE CHECK
+  function scoreCheck() {
+    if (currentScore > 99) { // Updates Score
+      level = level + 1
+      speed = speed / 2
+      currentScore = currentScore - 100
+    }
+    cells[width - 1].innerHTML = currentScore
+    cells[3].innerHTML = level
+    return speed
+  }
+
   //GAME START SCREEN 
   function startScreen() {
     for (let i = 0; i < width * hight; i++) {
@@ -161,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function shapeArr() {
     allShapes = []
     zShape = [3,4,14,15]
-    sShape = [13,4,14,5]
+    sShape = [13,4,5,14]
     lShape = [4,14,24,25]
     l2Shape = [4,14,23,24]
     tShape = [13,4,14,15]
@@ -180,17 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //DRAWS EVERY NEW CURRENT SHAPE  
   function drawShape(allShapes) {
     console.log('New Shape Here')
-
-    if (currentScore > 99) { // Updates Score
-      level = level + 1
-      startSpeed = startSpeed / 2
-      currentScore = currentScore - 100
-    }
-    cells[width - 1].innerHTML = currentScore
-    cells[3].innerHTML = level
-
-
-    console.log(usedDivs)
+    scoreCheck()
     currentShape = allShapes[Math.floor(Math.random() * 7 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -202,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //Get Player ID
   function getPlayerId() {
-    let playerId = new Number
     if (currentShape[1] % width === width - 1) {
       return playerId = currentShape[1] - 1 //RIGHT wall check
     } else if (currentShape[1] % width === 0) {
@@ -212,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
-    const playerId = getPlayerId()
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -234,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL sSHAPE POSITIONS //
   function sShapeUp(upCount) {
-    const playerId = getPlayerId()
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -256,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL lShapeUp POSITIONS //
   function lShapeUp(upCount) {
-    const playerId = getPlayerId()
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -288,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL l2Shape POSITIONS //
   function lShapeUp2(upCount) {
-    const playerId = getPlayerId()
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -320,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL tShape POSITIONS // 
   function tShapeUp(upCount) {
-    const playerId = currentShape[1]
+    playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -352,7 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL iShape POSITIONS
   function iShapeUp(upCount) {
-    let playerId = new Number
 
     if (currentShape[1] % width === width - 1) {
       playerId = currentShape[1] - 2 //RIGHT wall check
@@ -470,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //GAME OVER SCREEN 
   function gameOver() {
+    gameEnd = true
     for (let i = 0; i < width * hight; i++) {
 
       cells[i].classList.remove('used')
@@ -559,9 +581,12 @@ document.addEventListener('DOMContentLoaded', () => {
         checkBtmCollision(currentShape)
         break
       
-      case 13: //RESTART BUTTON
+      case 13: //ENTER - START & RESTART BUTTON
+        speedUpDrop()
         gameStart()
         break
     }
   })
 })
+
+
