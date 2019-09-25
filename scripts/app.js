@@ -45,16 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
   /********************************************** FUNCTIONS ***************************************/
   //GAME PLAY 
 
-  // //DROPS CURRENT SHAPE 
+  //DROPS CURRENT SHAPE 
   function speedUpDrop() {
     if (gameEnd) {
       gameEnd = false
       return
     }
     shapeDrop = setInterval(() => { 
-      console.log(speed)
-      console.log(startSpeed)
-      console.log(level)
       if (speed < startSpeed) {
         startSpeed = speed
         clearInterval(shapeDrop)
@@ -196,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zShape = [3,4,14,15]
     sShape = [13,4,5,14]
     lShape = [4,14,24,25]
-    l2Shape = [4,14,23,24]
+    l2Shape = [4,23,14,24] 
     tShape = [13,4,14,15]
     sqShape = [4,5,14,15]
     iShape = [3,4,5,6]
@@ -214,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function drawShape(allShapes) {
     console.log('New Shape Here')
     scoreCheck()
+    //currentShape = tShape
     currentShape = allShapes[Math.floor(Math.random() * 7 )]
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -225,16 +223,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //Get Player ID
   function getPlayerId() {
-    if (currentShape[1] % width === width - 1) {
+    let wallCheckR = currentShape.filter(element => element % width === width - 1)
+    let wallCheckL = currentShape.filter(element => element % width === 0)
+
+    if (wallCheckR.length > 0) {
       return playerId = currentShape[1] - 1 //RIGHT wall check
-    } else if (currentShape[1] % width === 0) {
+    } else if (wallCheckL.length > 0) {
       return playerId = currentShape[1] + 1 // LEFT Wall check
     } else return playerId = currentShape[1]
+
+    // if (currentShape[1] % width === width - 1) {
+    //   return playerId = currentShape[1] - 1 //RIGHT wall check
+    // } else if (currentShape[1] % width === 0) {
+    //   return playerId = currentShape[1] + 1 // LEFT Wall check
+    // } else return playerId = currentShape[1]
   }
+
+  ///Second attempt at Get player ID 
+  // let wallCheckR = currentShape.filter(element => element % width === width - 1)
+  // let wallCheckL = currentShape.filter(element => element % width === 0)
+
+ 
+
 
   //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
-    playerId = getPlayerId()
+    //playerId = getPlayerId()
+    playerId = currentShape[1]
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -256,7 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL sSHAPE POSITIONS //
   function sShapeUp(upCount) {
-    playerId = getPlayerId()
+    playerId = currentShape[1]
+    //playerId = getPlayerId()
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -310,30 +326,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL l2Shape POSITIONS //
   function lShapeUp2(upCount) {
-    playerId = getPlayerId()
+    //playerId = currentShape[2]
+
+    //Get Player ID
+    if (currentShape[2] % width === width - 1) {
+      playerId = currentShape[2] - 1 //RIGHT wall check
+    } else if (currentShape[2] % width === 0) {
+      playerId = currentShape[2] + 1 // LEFT Wall check
+    } else playerId = currentShape[2]
+
+
+
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
     if (upCount % 4 === 1) {
-      currentShape[0] = playerId - width - 1 
+      currentShape[0] = playerId - width - 1
       currentShape[1] = playerId - 1
-      currentShape[2] = playerId
-      currentShape[3] = playerId + 1
+      currentShape[2] = playerId 
+      currentShape[3] = playerId + 1 
+
     } else if (upCount % 4 === 2) {   
-      currentShape[0] = playerId - width + 1
-      currentShape[1] = playerId - width + 2
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId - width + 1
+      currentShape[2] = playerId 
+      currentShape[3] = playerId + width
+
+    } else if (upCount % 4 === 3) {
+      currentShape[0] = playerId - 1
+      currentShape[1] = playerId 
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width + 1
-    } else if (upCount % 4 === 3) {
-      currentShape[0] = playerId + width - 2
-      currentShape[1] = playerId + width - 1
-      currentShape[2] = playerId + width
-      currentShape[3] = playerId + width + width 
+
     } else if (upCount % 4 === 0) { // default position 
-      currentShape[0] = playerId - width
-      currentShape[1] = playerId
-      currentShape[2] = playerId + width - 1
-      currentShape[3] = playerId + width
+      currentShape[0] = playerId - width - 1
+      currentShape[1] = playerId + width - 1 - 1
+      currentShape[2] = playerId - 1
+      currentShape[3] = playerId + width - 1
     }
     currentShape.forEach(element => {
       cells[element].classList.add('player')
@@ -342,30 +371,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //ALL tShape POSITIONS // 
   function tShapeUp(upCount) {
-    playerId = getPlayerId()
+
+    //playerId = getPlayerId() 
+
+    let wallCheckR = currentShape.filter(element => element % width === width - 1)
+    let wallCheckL = currentShape.filter(element => element % width === 0)
+
+    // if (wallCheckR.length > 0) currentShape = currentShape.map(element => element - 1)
+    // if (wallCheckL.length > 0) currentShape = currentShape.map(element => element - 1)
+
+    // playerId = currentShape[1]
+
+    // for (let i = 0; i < currentShape.length; i ++) {
+    //   if (currentShape[i] % width)
+    // }
+
+    // if (wallCheckR.length > 0) {
+    //   return playerId = currentShape[1] - 1 //RIGHT wall check
+    // } else if (wallCheckL.length > 0) {
+    //   return playerId = currentShape[1] + 1 // LEFT Wall check
+    // } else return playerId = currentShape[1]
+
+    //Get Player ID
+    if (wallCheckR.length > 0) {
+      playerId = currentShape[3] - 1 //RIGHT wall check
+    } else if (wallCheckL.length > 0 ) {
+      playerId = currentShape[2] // LEFT Wall check
+    } else playerId = currentShape[1]
+
+    console.log(upCount)
+    console.log(playerId)
+    console.log(currentShape)
+
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
+
     if (upCount % 4 === 1) {
+
       currentShape[0] = playerId - width - 1
-      currentShape[1] = playerId - 1
+      currentShape[1] = playerId - 1 
       currentShape[2] = playerId 
       currentShape[3] = playerId + width - 1
-    } else if (upCount % 4 === 2) {   
+
+    } else if (upCount % 4 === 2) { 
       currentShape[0] = playerId - width
-      currentShape[1] = playerId + 1 - width
-      currentShape[2] = playerId + 1
-      currentShape[3] = playerId + 1 - width + 1
+      currentShape[1] = playerId - width + 1
+      currentShape[2] = playerId + 1 
+      currentShape[3] = playerId - width + 1 + 1
+
     } else if (upCount % 4 === 3) {
-      currentShape[0] = playerId + width - width + 1
+
+      currentShape[0] = playerId + 1
       currentShape[1] = playerId + width
       currentShape[2] = playerId + width + 1
       currentShape[3] = playerId + width + width + 1
+
     } else if (upCount % 4 === 0) { // default position 
+
       currentShape[0] = playerId + width - 1
-      currentShape[1] = playerId
-      currentShape[2] = playerId + width
+      currentShape[1] = playerId 
+      currentShape[2] = playerId + width  
       currentShape[3] = playerId + width + 1
+
     }
     currentShape.forEach(element => {
       cells[element].classList.add('player')
