@@ -35,11 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let gameEnd = false
 
   //MUSIC VARIABLES
-  const music = ('https://upload.wikimedia.org/wikipedia/commons/e/e8/Korobeiniki.ogg')
+  const music = new Audio('https://upload.wikimedia.org/wikipedia/commons/e/e8/Korobeiniki.ogg')
   music.loop = true
   let musicCount = 0
-
-
 
   /************************************************ GAME *******************************************/ 
 
@@ -519,6 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //GAME OVER SCREEN 
   function gameOver() {
     gameEnd = true
+    musicCount = 0
     if (highestLevel < level ) {
       highestLevel = level
       cells[19].innerHTML = highestLevel
@@ -649,6 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
         break
 
       case 32: //SPACE - MUSIC ON/PAUSE
+        console.log('space pressed')
         musicCount ++
         playMusic(musicCount)
     }
