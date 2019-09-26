@@ -188,15 +188,22 @@ document.addEventListener('DOMContentLoaded', () => {
     cells[7].innerHTML = 'OR'
     cells[8].innerHTML = 'E '
 
-    cells[10].innerHTML = 'HI'
-    cells[11].innerHTML = 'GH'
-    cells[12].innerHTML = 'ES'
-    cells[13].innerHTML = 'T '
+    cells[10].innerHTML = 'BE'
+    cells[11].innerHTML = 'ST'
+    //cells[12].innerHTML = 'ES'
+    //cells[13].innerHTML = 'T '
 
     cells[16].innerHTML = 'LE'
     cells[17].innerHTML = 'VE'
     cells[18].innerHTML = 'L '
     cells[19].innerHTML = highestLevel
+
+    cells[36].innerHTML = 'NE'
+    cells[37].innerHTML = 'XT'
+
+    cells[46].innerHTML = 'SH'
+    cells[47].innerHTML = 'AP'
+    cells[48].innerHTML = 'E '
 
     //Starts Game 
     shapeArr()
@@ -225,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 //****************************************************FIX THIS */
+//***** There has to be a way to temporarily store the next shape */
   function nextShapeCheck(allShapes) {
 
     nextShape = allShapes[Math.floor(Math.random() * 7 )]
@@ -234,7 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (shapesPlayed === 0) {
       currentShape = allShapes[Math.floor(Math.random() * 7 )]
-    } else currentShape = nextShapeArr[shapesPlayed - 1] 
+    } else {
+      currentShape = nextShape
+      
+      //currentShape = nextShapeArr[0] //- shows the next shape but does not allow rotation
+      //nextShapeArr.shift()
+
+    }
 
     console.log(currentShape)
 
@@ -246,8 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function drawShape(nextShapeArr, currentShape, shapesPlayed) {
     console.log('New Shape Here')
     scoreCheck()
-    
-    const drawNShape = nextShapeArr[shapesPlayed - 1].map(element => element - 2)
+
+    const drawNShape = nextShape.map(element => element - 2)
+
+    ///const drawNShape = nextShapeArr[shapesPlayed - 1].map(element => element - 2)
 
     shapeSpace.forEach(element => {
       cells[element].classList.remove('next')
@@ -444,10 +460,6 @@ document.addEventListener('DOMContentLoaded', () => {
       playerId = currentShape[2] // LEFT Wall check
     } else playerId = currentShape[1]
 
-    console.log(upCount)
-    console.log(playerId)
-    console.log(currentShape)
-
     currentShape.forEach(element => {
       cells[element].classList.remove('player')
     })
@@ -561,7 +573,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //CHECK ROW
   function rowCheck(usedDivs) {
-    console.log(usedDivs)
     let tempArr = new Array
     const yMin = Math.floor(Math.min(...usedDivs) / width)
 
@@ -703,7 +714,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 40: //DOWN 
         //CHECKS IF SHAPE IS IN USED DIVS ARRAY
-        console.log('keydown')
         checkShape(currentShape)
         checkBtmCollision(currentShape)
         break
