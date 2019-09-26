@@ -61,7 +61,8 @@ body {
 }
 
 .grid div.next {
-  background-color: yellow;
+  background-color: darkblue;
+  border: 1px solid black;
 }
 
 .grid div.black {
