@@ -593,15 +593,11 @@ document.addEventListener('DOMContentLoaded', () => {
         //Check before going left that all elements in array are within the board & for colission to the left
         tempArr = currentShape.filter(element => element % width > 0).filter(element => usedDivs.includes(element - 1) === false) 
         if (tempArr.length === 4) {
-          console.log('before changes' + currentShape)
-
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] -= 1
           }
           currentShape.map(element => cells[element].classList.add('player'))
-
-          console.log('AFTER changes' + currentShape)
         }
         break
 
