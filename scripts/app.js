@@ -8,33 +8,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const cells = []
 
   //SHAPE VARIABLES
-  let currentShape = new Array 
-  let allShapes = new Array
-  let zShape = new Array
-  let sShape = new Array
-  let lShape = new Array
-  let l2Shape = new Array
-  let tShape = new Array
-  let sqShape = new Array
-  let iShape = new Array
+  let currentShape = []
+  let allShapes = []
+  let zShape = []
+  let sShape = []
+  let lShape = []
+  let l2Shape = []
+  let tShape = []
+  let sqShape = []
+  let iShape = []
   let shapesPlayed = 0
   const shapeSpace = [21,22,23,24,25,31,32,33,34,35,41,42,43,44,36]
   let nextShape = null
   let nextShapeArr = []
+  let shapesToPlayArr = []
+  let firstShape = true
+  let firstLocation = []
 
   //OTHER VARS
-  let usedDivs = new Array
+  let usedDivs = []
   let upCount = 0
-  let currentScore = new Number
+  let currentScore = 0
   let highestScore = 0 
   let highestLevel = 0
   let level = 0
   let linesDeleted = 0
   let startSpeed = 500
   let speed = 500
-  let playerId = new Number
+  let playerId = 0
   let shapeDrop = null
   let gameEnd = false
+
+  //MUSIC VARIABLES
+  const music = new Audio ('https://upload.wikimedia.org/wikipedia/commons/e/e8/Korobeiniki.ogg')
+  music.loop = true
+  let musicCount = 0
+
+
 
   /************************************************ GAME *******************************************/ 
 
@@ -190,8 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cells[10].innerHTML = 'BE'
     cells[11].innerHTML = 'ST'
-    //cells[12].innerHTML = 'ES'
-    //cells[13].innerHTML = 'T '
 
     cells[16].innerHTML = 'LE'
     cells[17].innerHTML = 'VE'
@@ -214,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function shapeArr() {
     allShapes = []
     zShape = [23,24,34,35] //[25,26,36,37] //[3,4,14,15]
-    sShape = [33,24,25,34]//[35,26,27,36]//[13,4,5,14]
+    sShape = [34,25,26,35]//[35,26,27,36]//[13,4,5,14]
     lShape = [24,34,44,45] //[26,36,46,47]//[4,14,24,25]
     l2Shape = [24,43,34,44]//[26,45,36,46]//[4,23,14,24] 
     tShape = [33,24,34,35]//[35,26,36,37]//[13,4,14,15]
@@ -234,31 +242,64 @@ document.addEventListener('DOMContentLoaded', () => {
 //****************************************************FIX THIS */
 //***** There has to be a way to temporarily store the next shape */
   function nextShapeCheck(allShapes) {
+    console.log('New Shape Here')
 
-    nextShape = allShapes[Math.floor(Math.random() * 7 )]
-    console.log(nextShape)
-    nextShapeArr.push(nextShape)
-    console.log(nextShapeArr)
 
-    if (shapesPlayed === 0) {
+    // shapesToPlayArr.push(allShapes[Math.floor(Math.random() * 7 )])
+    // shapesToPlayArr.push(allShapes[Math.floor(Math.random() * 7 )])
+
+    // currentShape = shapesToPlayArr[shapesPlayed]
+    // console.log(currentShape)
+    // nextShape = shapesToPlayArr[shapesPlayed + 1]
+    // console.log(nextShape)
+    // //shapesToPlayArr.shift()
+    // console.log(shapesToPlayArr)
+
+    // SET THE CURRENT SHAPE FIRST if first shape is false
+
+
+    if (firstShape) {
+      firstLocation = []
       currentShape = allShapes[Math.floor(Math.random() * 7 )]
+      // currentShape.forEach(element => {
+      //   firstLocation.push(element)
+      // })
+      console.log('first figure first location' + firstLocation)
+      firstShape = false
     } else {
+      firstLocation = []
       currentShape = nextShape
-      
-      //currentShape = nextShapeArr[0] //- shows the next shape but does not allow rotation
-      //nextShapeArr.shift()
-
+      currentShape.forEach(element => {
+        firstLocation.push(element)
+      })
     }
 
-    console.log(currentShape)
+    console.log('current shape first log' + currentShape)
+    
+    nextShape = allShapes[Math.floor(Math.random() * 7 )]
+
+    //WORKING WITHOUT NEXT SHAPE
+    // nextShape = allShapes[Math.floor(Math.random() * 7 )]
+    // console.log(nextShape)
+    // nextShapeArr.push(nextShape)
+    // console.log(nextShapeArr)
+
+    // if (shapesPlayed === 0) {
+    //   currentShape = allShapes[Math.floor(Math.random() * 7 )]
+    // } else {
+    //   currentShape = nextShape
+      
+    // currentShape = nextShapeArr[shapesPlayed] //- shows the next shape but does not allow rotation
+    // nextShapeArr.shift()
+
+    // }
 
     shapesPlayed ++
     drawShape(nextShape, currentShape, shapesPlayed)
   }
 
   //DRAWS EVERY NEW CURRENT SHAPE  
-  function drawShape(nextShapeArr, currentShape, shapesPlayed) {
-    console.log('New Shape Here')
+  function drawShape(nextShapeArr, currentShape) {
     scoreCheck()
 
     const drawNShape = nextShape.map(element => element - 2)
@@ -628,6 +669,13 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[i].classList.remove('next')
       cells[i].classList.add('black')
 
+      cells[36].innerHTML = ''
+      cells[37].innerHTML = ''
+  
+      cells[46].innerHTML = ''
+      cells[47].innerHTML = ''
+      cells[48].innerHTML = ''
+
       cells[63].innerHTML = 'G'
       cells[64].innerHTML = 'A'
       cells[65].innerHTML = 'M'
@@ -669,6 +717,13 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(shapeDrop)
   }
 
+  //***************MUSIC FUNCTION ************************* */
+  
+  function playMusic(musicCount) {
+    if (musicCount % 2 === 1) return music.play()
+    if (musicCount % 2 === 0) return music.pause()
+  }
+ 
 
   /************************************************************ EVENT LISTENERS *****************************************/
   //MOVESHAPE LEFT // RIGHT // DOWN 
@@ -691,12 +746,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 38: //UP changes position
         upCount ++
+        console.log('UP PRESSED')
+        console.log('log at end current shape' + currentShape)
+        console.log('log at end first location' + firstLocation)
+        //console.log('zshape comparison', currentShape === zShape)
+        console.log('z' + zShape)
+        console.log('s' + sShape)
+        console.log('l' + lShape)
+        console.log('l2' + l2Shape)
+        console.log('t' + tShape)
+        console.log('i' + iShape)
+
+
         if (currentShape === zShape) return zShapeUp(upCount)
         if (currentShape === sShape) return sShapeUp(upCount)
         if (currentShape === lShape) return lShapeUp(upCount)
         if (currentShape === l2Shape) return lShapeUp2(upCount)
         if (currentShape === tShape) return tShapeUp(upCount)
         if (currentShape === iShape) return iShapeUp(upCount)
+
+        if (firstLocation[0] === zShape[0] && firstLocation[1] === zShape[1]) return zShapeUp(upCount)
+        if (firstLocation[0] === sShape[0] && firstLocation[1] === sShape[1]) return sShapeUp(upCount)
+        if (firstLocation[0] === lShape[0] && firstLocation[1] === lShape[1]) return lShapeUp(upCount)
+        if (firstLocation[0] === l2Shape[0] && firstLocation[1] === l2Shape[1]) return lShapeUp2(upCount)
+        if (firstLocation[0] === tShape[0] && firstLocation[1] === tShape[1]) return tShapeUp(upCount)
+        if (firstLocation[0] === iShape[0] && firstLocation[1] === iShape[1]) return iShapeUp(upCount)
         break
 
       case 39: //RIGHT
@@ -711,7 +785,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         break
 
-
       case 40: //DOWN 
         //CHECKS IF SHAPE IS IN USED DIVS ARRAY
         checkShape(currentShape)
@@ -722,6 +795,10 @@ document.addEventListener('DOMContentLoaded', () => {
         speedUpDrop()
         gameStart()
         break
+
+      case 32:
+        musicCount ++
+        playMusic(musicCount)
     }
   })
 })
