@@ -218,11 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //AN ARRAY OF ALL SHAPES
   function shapeArr() {
     allShapes = []
-    zShape = [23,24,34,35] //[25,26,36,37] //[3,4,14,15]
-    sShape = [34,25,26,35]//[35,26,27,36]//[13,4,5,14]
-    lShape = [24,34,44,45] //[26,36,46,47]//[4,14,24,25]
-    l2Shape = [24,43,34,44]//[26,45,36,46]//[4,23,14,24] 
-    tShape = [33,24,34,35]//[35,26,36,37]//[13,4,14,15]
+    zShape = [24,25,35,36] //[23,24,34,35]//[25,26,36,37] //[3,4,14,15] - done
+    sShape = [26,25,35,34] //[34,25,26,35]//[35,26,27,36]//[13,4,5,14] - done
+    lShape = [24,34,44,45] //[24,34,44,45] //[26,36,46,47]//[4,14,24,25] - done
+    l2Shape = [25,35,45,44] //[24,43,34,44]//[26,45,36,46]//[4,23,14,24] - done
+    tShape = [34,25,35,36] //[33,24,34,35]//[35,26,36,37]//[13,4,14,15] - done
     sqShape = [24,25,34,35]//[26,27,36,37]//[4,5,14,15]
     iShape = [34,35,36,37]//[35,36,37,38]//[3,4,5,6]
     allShapes.push(zShape)
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape.forEach(element => {
         firstLocation.push(element)
       })
-    }    
+    } 
     nextShape = allShapes[Math.floor(Math.random() * 7 )]
     drawShape(nextShape, currentShape)
   }
@@ -275,12 +275,10 @@ document.addEventListener('DOMContentLoaded', () => {
   //ALL SHAPES & POSITIONS
   //Get Player ID
   function getPlayerId() {
-    const wallCheckR = currentShape.filter(element => element % width === width - 1)
-    const wallCheckL = currentShape.filter(element => element % width === 0)
-
-    if (wallCheckR.length > 0) {
+    const wallCheck = currentShape[1] % width
+    if (wallCheck === width - 1) {
       return playerId = currentShape[1] - 1 //RIGHT wall check
-    } else if (wallCheckL.length > 0) {
+    } else if (wallCheck === 0) {
       return playerId = currentShape[1] + 1 // LEFT Wall check
     } else return playerId = currentShape[1]
   }
@@ -288,157 +286,123 @@ document.addEventListener('DOMContentLoaded', () => {
   //ALL zSHAPE POSITIONS //
   function zShapeUp(upCount) {
     playerId = getPlayerId()
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    currentShape.map(element => cells[element].classList.remove('player'))
     if (upCount % 2 === 1) {
-      currentShape[0] = playerId - width + 1
+      currentShape[0] = playerId - width
       currentShape[1] = playerId
-      currentShape[2] = playerId + 1
-      currentShape[3] = playerId + width
+      currentShape[2] = playerId - 1
+      currentShape[3] = playerId + width - 1
     } else { // default position 
       currentShape[0] = playerId - 1
       currentShape[1] = playerId
       currentShape[2] = playerId + width
-      currentShape[3] = playerId + width + 1
+      currentShape[3] = playerId + width + 1 
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
   //ALL sSHAPE POSITIONS //
   function sShapeUp(upCount) {
     playerId = getPlayerId()
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    currentShape.map(element => cells[element].classList.remove('player'))
     if (upCount % 2 === 1) {
       currentShape[0] = playerId - width
       currentShape[1] = playerId
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width + 1
     } else { // default position 
-      currentShape[0] = playerId + width - 1
+      currentShape[0] = playerId + 1
       currentShape[1] = playerId
       currentShape[2] = playerId + width
-      currentShape[3] = playerId + 1
+      currentShape[3] = playerId + width - 1
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
-  //ALL lShapeUp POSITIONS //
+  //ALL lShapeUp POSITIONS // REWRITTEN 
   function lShapeUp(upCount) {
     playerId = getPlayerId()
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    currentShape.map(element => cells[element].classList.remove('player'))
     if (upCount % 4 === 1) {
       currentShape[0] = playerId - 1
       currentShape[1] = playerId
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width - 1
     } else if (upCount % 4 === 2) {   
-      currentShape[0] = playerId - width - 1
-      currentShape[1] = playerId - width
-      currentShape[2] = playerId 
-      currentShape[3] = playerId + width
+      currentShape[0] = playerId + width
+      currentShape[1] = playerId 
+      currentShape[2] = playerId - width
+      currentShape[3] = playerId - width - 1
     } else if (upCount % 4 === 3) {
-      currentShape[0] = playerId + width - 1
-      currentShape[1] = playerId + width
+      currentShape[0] = playerId - 1
+      currentShape[1] = playerId 
       currentShape[2] = playerId + 1
-      currentShape[3] = playerId + width + 1
+      currentShape[3] = playerId - width + 1
     } else if (upCount % 4 === 0) { // default position 
       currentShape[0] = playerId - width
-      currentShape[1] = playerId
+      currentShape[1] = playerId 
       currentShape[2] = playerId + width
       currentShape[3] = playerId + width + 1
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
-  //ALL l2Shape POSITIONS //
+  //ALL l2Shape POSITIONS // REWRITTEN
   function lShapeUp2(upCount) {
-
-    //Get Player ID
-    if (currentShape[2] % width === width - 1) {
-      playerId = currentShape[2] - 1 //RIGHT wall check
-    } else if (currentShape[2] % width === 0) {
-      playerId = currentShape[2] + 1 // LEFT Wall check
-    } else playerId = currentShape[2]
-
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    playerId = getPlayerId()
+    currentShape.map(element => cells[element].classList.remove('player'))
     if (upCount % 4 === 1) {
-      currentShape[0] = playerId - width - 1
-      currentShape[1] = playerId - 1
-      currentShape[2] = playerId 
-      currentShape[3] = playerId + 1 
-    } else if (upCount % 4 === 2) {   
-      currentShape[0] = playerId - width
-      currentShape[1] = playerId - width + 1
-      currentShape[2] = playerId 
-      currentShape[3] = playerId + width
+      currentShape[0] = playerId + 1
+      currentShape[1] = playerId 
+      currentShape[2] = playerId - 1
+      currentShape[3] = playerId - width - 1
+    } else if (upCount % 4 === 2) {  
+      currentShape[0] = playerId + width
+      currentShape[1] = playerId 
+      currentShape[2] = playerId - width
+      currentShape[3] = playerId - width + 1 
     } else if (upCount % 4 === 3) {
       currentShape[0] = playerId - 1
       currentShape[1] = playerId 
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + width + 1
     } else if (upCount % 4 === 0) { // default position 
-      currentShape[0] = playerId - width - 1
-      currentShape[1] = playerId + width - 1 - 1
-      currentShape[2] = playerId - 1
+      currentShape[0] = playerId - width
+      currentShape[1] = playerId 
+      currentShape[2] = playerId + width
       currentShape[3] = playerId + width - 1
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
   //ALL tShape POSITIONS // 
   function tShapeUp(upCount) {
-    const wallCheckR = currentShape.filter(element => element % width === width - 1)
-    const wallCheckL = currentShape.filter(element => element % width === 0)
+    playerId = getPlayerId()
 
-    //Get Player ID
-    if (wallCheckR.length > 0) {
-      playerId = currentShape[3] - 1 //RIGHT wall check
-    } else if (wallCheckL.length > 0 ) {
-      playerId = currentShape[2] // LEFT Wall check
-    } else playerId = currentShape[1]
-
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    currentShape.map(element => cells[element].classList.remove('player'))
+    
     if (upCount % 4 === 1) {
       currentShape[0] = playerId - width - 1
-      currentShape[1] = playerId - 1 
-      currentShape[2] = playerId 
+      currentShape[1] = playerId 
+      currentShape[2] = playerId - 1 
       currentShape[3] = playerId + width - 1
     } else if (upCount % 4 === 2) { 
-      currentShape[0] = playerId - width
-      currentShape[1] = playerId - width + 1
-      currentShape[2] = playerId + 1 
-      currentShape[3] = playerId - width + 1 + 1
+      currentShape[0] = playerId - width - 1
+      currentShape[1] = playerId
+      currentShape[2] = playerId - width
+      currentShape[3] = playerId - width + 1
     } else if (upCount % 4 === 3) {
-      currentShape[0] = playerId + 1
-      currentShape[1] = playerId + width
-      currentShape[2] = playerId + width + 1
-      currentShape[3] = playerId + width + width + 1
+      currentShape[0] = playerId - width + 1 
+      currentShape[1] = playerId
+      currentShape[2] = playerId + 1
+      currentShape[3] = playerId + width + 1
     } else if (upCount % 4 === 0) { // default position 
       currentShape[0] = playerId + width - 1
-      currentShape[1] = playerId 
-      currentShape[2] = playerId + width  
+      currentShape[1] = playerId
+      currentShape[2] = playerId + width
       currentShape[3] = playerId + width + 1
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
   //ALL iShape POSITIONS
@@ -451,9 +415,8 @@ document.addEventListener('DOMContentLoaded', () => {
       playerId = currentShape[1] + 1 // LEFT Wall check
     } else playerId = currentShape[1]
 
-    currentShape.forEach(element => {
-      cells[element].classList.remove('player')
-    })
+    currentShape.map(element => cells[element].classList.remove('player'))
+
     if (upCount % 2 === 1) {
       currentShape[0] = playerId - width
       currentShape[1] = playerId 
@@ -465,9 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentShape[2] = playerId + 1
       currentShape[3] = playerId + 1 + 1
     }
-    currentShape.forEach(element => {
-      cells[element].classList.add('player')
-    })
+    currentShape.map(element => cells[element].classList.add('player'))
   }
 
 
@@ -479,8 +440,9 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = currentShape.length - 1; i >= 0; i--) {
         cells[currentShape[i]].classList.remove('player')
         currentShape[i] += width
-        cells[currentShape[i]].classList.add('player')
+        //cells[currentShape[i]].classList.add('player')
       }
+      currentShape.map(element => cells[element].classList.add('player'))
     } else { //DROPS shape to a used array 
       currentShape.forEach(element => {
         cells[element].classList.add('used')
@@ -625,18 +587,22 @@ document.addEventListener('DOMContentLoaded', () => {
   //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keydown', (e) => {
     
-    let tempArr = new Array
+    let tempArr = []
 
     switch (e.keyCode) {
       case 37: //LEFT
         //Check before going left that all elements in array are within the board & for colission to the left
         tempArr = currentShape.filter(element => element % width > 0).filter(element => usedDivs.includes(element - 1) === false) 
         if (tempArr.length === 4) {
+          console.log('before changes' + currentShape)
+
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] -= 1
-            cells[currentShape[i]].classList.add('player')
           }
+          currentShape.map(element => cells[element].classList.add('player'))
+
+          console.log('AFTER changes' + currentShape)
         }
         break
 
@@ -661,12 +627,13 @@ document.addEventListener('DOMContentLoaded', () => {
       case 39: //RIGHT
         //Check before going right that all elements in array are within the board & for colission to the right
         tempArr = currentShape.filter(element => element % width < width - 1).filter(element => usedDivs.includes(element + 1) === false) 
+        
         if (tempArr.length === 4) {
-          for (let i = currentShape.length - 1; i >= 0; i--) {
+          for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
             currentShape[i] += 1
-            cells[currentShape[i]].classList.add('player')
           }
+          currentShape.map(element => cells[element].classList.add('player'))
         }
         break
 
@@ -687,5 +654,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
-
