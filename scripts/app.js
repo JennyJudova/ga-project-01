@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[i].classList.remove('start')
     }
 
-    //5 LIES AT THE TOP - SCORE BOARD
+    //5 LINES AT THE TOP - SCORE BOARD
     for (let i = 0; i < width * 5; i++) {
       cells[i].classList.add('top')
     }
@@ -648,7 +648,6 @@ document.addEventListener('DOMContentLoaded', () => {
         break
 
       case 32: //SPACE - MUSIC ON/PAUSE
-        console.log('space pressed')
         musicCount ++
         playMusic(musicCount)
     }
