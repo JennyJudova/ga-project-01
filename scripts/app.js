@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   //GLOBAL VARIABLES
 
-  //GRID variables
+  //GRID VARIABLES
   const width = 10
   const hight = 25
   const grid = document.querySelector('.grid')
@@ -22,15 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let firstShape = true
   let firstLocation = []
 
-  //OTHER VARS
+  //ROTATION & MOVEMENT VARIABLES
   let usedDivs = []
   let upCount = 0
+  let playerId = 0
+
+  //SCORE VARIABLES
   let currentScore = 0
   let highestLevel = 0
   let level = 0
+
+  //SPEED VARIABLES
   let startSpeed = 500
   let speed = 500
-  let playerId = 0
   let shapeDrop = null
   let gameEnd = false
 
@@ -93,75 +97,86 @@ document.addEventListener('DOMContentLoaded', () => {
       cells[i].classList.remove('player')
       cells[i].classList.add('start')
 
-      cells[22].innerHTML = 'PR'
-      cells[23].innerHTML = 'ES'
-      cells[24].innerHTML = 'S '
-      cells[26].innerHTML = 'EN'
-      cells[27].innerHTML = 'TE'
-      cells[28].innerHTML = 'R '
+      cells[10].innerHTML = '*'
+      cells[11].innerHTML = '*'
+      cells[12].innerHTML = 'T'
+      cells[13].innerHTML = 'E'
+      cells[14].innerHTML = 'T'
+      cells[15].innerHTML = 'R'
+      cells[16].innerHTML = 'I'
+      cells[17].innerHTML = 'S'
+      cells[18].innerHTML = '*'
+      cells[19].innerHTML = '*'
 
-      cells[35].innerHTML = 'TO'
+      cells[32].innerHTML = 'PR'
+      cells[33].innerHTML = 'ES'
+      cells[34].innerHTML = 'S '
+      cells[36].innerHTML = 'EN'
+      cells[37].innerHTML = 'TE'
+      cells[38].innerHTML = 'R '
+
+      cells[45].innerHTML = 'TO'
       
-      cells[43].innerHTML = 'S'
-      cells[44].innerHTML = 'T'
-      cells[45].innerHTML = 'A'
-      cells[46].innerHTML = 'R'
-      cells[47].innerHTML = 'T'
+      cells[53].innerHTML = 'S'
+      cells[54].innerHTML = 'T'
+      cells[55].innerHTML = 'A'
+      cells[56].innerHTML = 'R'
+      cells[57].innerHTML = 'T'
 
-      cells[53].innerHTML = 'G'
-      cells[54].innerHTML = 'A'
-      cells[55].innerHTML = 'M'
-      cells[56].innerHTML = 'E'
+      cells[63].innerHTML = 'G'
+      cells[64].innerHTML = 'A'
+      cells[65].innerHTML = 'M'
+      cells[66].innerHTML = 'E'
 
-      cells[60].innerHTML = '*'
-      cells[61].innerHTML = '*'
-      cells[62].innerHTML = '*'
-      cells[63].innerHTML = '*'
-      cells[64].innerHTML = '*'
-      cells[65].innerHTML = '*'
-      cells[66].innerHTML = '*'
-      cells[67].innerHTML = '*'
-      cells[68].innerHTML = '*'
-      cells[69].innerHTML = '*'
+      cells[70].innerHTML = '*'
+      cells[71].innerHTML = '*'
+      cells[72].innerHTML = '*'
+      cells[73].innerHTML = '*'
+      cells[74].innerHTML = '*'
+      cells[75].innerHTML = '*'
+      cells[76].innerHTML = '*'
+      cells[77].innerHTML = '*'
+      cells[78].innerHTML = '*'
+      cells[79].innerHTML = '*'
 
-      cells[73].innerHTML = 'PR'
-      cells[74].innerHTML = 'ES'
-      cells[75].innerHTML = 'S '
+      cells[83].innerHTML = 'PR'
+      cells[84].innerHTML = 'ES'
+      cells[85].innerHTML = 'S '
 
-      cells[83].innerHTML = '"U'
-      cells[84].innerHTML = 'P"'
-      cells[85].innerHTML = ''
-      cells[86].innerHTML = 'TO'
+      cells[93].innerHTML = '"U'
+      cells[94].innerHTML = 'P"'
+      cells[95].innerHTML = ''
+      cells[96].innerHTML = 'TO'
 
-      cells[93].innerHTML = 'RO'
-      cells[94].innerHTML = 'TA'
-      cells[95].innerHTML = 'TE'
+      cells[103].innerHTML = 'RO'
+      cells[104].innerHTML = 'TA'
+      cells[105].innerHTML = 'TE'
 
-      cells[100].innerHTML = '*'
-      cells[101].innerHTML = '*'
-      cells[102].innerHTML = '*'
-      cells[103].innerHTML = '*'
-      cells[104].innerHTML = '*'
-      cells[105].innerHTML = '*'
-      cells[106].innerHTML = '*'
-      cells[107].innerHTML = '*'
-      cells[108].innerHTML = '*'
-      cells[109].innerHTML = '*'
+      cells[110].innerHTML = '*'
+      cells[111].innerHTML = '*'
+      cells[112].innerHTML = '*'
+      cells[113].innerHTML = '*'
+      cells[114].innerHTML = '*'
+      cells[115].innerHTML = '*'
+      cells[116].innerHTML = '*'
+      cells[117].innerHTML = '*'
+      cells[118].innerHTML = '*'
+      cells[119].innerHTML = '*'
 
-      cells[113].innerHTML = 'PR'
-      cells[114].innerHTML = 'ES'
-      cells[115].innerHTML = 'S '
+      cells[123].innerHTML = 'PR'
+      cells[124].innerHTML = 'ES'
+      cells[125].innerHTML = 'S '
 
-      cells[123].innerHTML = 'SP'
-      cells[124].innerHTML = 'AC'
-      cells[125].innerHTML = 'E '
+      cells[133].innerHTML = 'SP'
+      cells[134].innerHTML = 'AC'
+      cells[135].innerHTML = 'E '
 
-      cells[133].innerHTML = 'FO'
-      cells[134].innerHTML = 'R '
+      cells[143].innerHTML = 'FO'
+      cells[144].innerHTML = 'R '
 
-      cells[143].innerHTML = 'MU'
-      cells[144].innerHTML = 'SI'
-      cells[145].innerHTML = 'C '
+      cells[153].innerHTML = 'MU'
+      cells[154].innerHTML = 'SI'
+      cells[155].innerHTML = 'C '
     }
   }
 
@@ -216,13 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
   //AN ARRAY OF ALL SHAPES
   function shapeArr() {
     allShapes = []
-    zShape = [24,25,35,36] //[23,24,34,35]//[25,26,36,37] //[3,4,14,15] - done
-    sShape = [26,25,35,34] //[34,25,26,35]//[35,26,27,36]//[13,4,5,14] - done
-    lShape = [24,34,44,45] //[24,34,44,45] //[26,36,46,47]//[4,14,24,25] - done
-    l2Shape = [25,35,45,44] //[24,43,34,44]//[26,45,36,46]//[4,23,14,24] - done
-    tShape = [34,25,35,36] //[33,24,34,35]//[35,26,36,37]//[13,4,14,15] - done
-    sqShape = [24,25,34,35]//[26,27,36,37]//[4,5,14,15]
-    iShape = [34,35,36,37]//[35,36,37,38]//[3,4,5,6]
+    zShape = [24,25,35,36]
+    sShape = [26,25,35,34]
+    lShape = [24,34,44,45]
+    l2Shape = [25,35,45,44] 
+    tShape = [34,25,35,36] 
+    sqShape = [24,25,34,35]
+    iShape = [34,35,36,37]
     allShapes.push(zShape)
     allShapes.push(sShape)
     allShapes.push(lShape)
@@ -376,9 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //ALL tShape POSITIONS // 
   function tShapeUp(upCount) {
     playerId = getPlayerId()
-
     currentShape.map(element => cells[element].classList.remove('player'))
-    
     if (upCount % 4 === 1) {
       currentShape[0] = playerId - width - 1
       currentShape[1] = playerId 
@@ -412,9 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentShape[1] % width === 0) {
       playerId = currentShape[1] + 1 // LEFT Wall check
     } else playerId = currentShape[1]
-
     currentShape.map(element => cells[element].classList.remove('player'))
-
     if (upCount % 2 === 1) {
       currentShape[0] = playerId - width
       currentShape[1] = playerId 
@@ -432,13 +443,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //COLLISION FUNCTIONS
 
-  //CHECKS BOTTOM COLLISION
+  //CHECKS COLLISION WITH FLOOR 
   function checkBtmCollision(currentShape) {
     if ((Math.max(...currentShape) + width) < width * hight) {
       for (let i = currentShape.length - 1; i >= 0; i--) {
         cells[currentShape[i]].classList.remove('player')
         currentShape[i] += width
-        //cells[currentShape[i]].classList.add('player')
       }
       currentShape.map(element => cells[element].classList.add('player'))
     } else { //DROPS shape to a used array 
@@ -452,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  //CHECKS if the next step will make it collide with the used divs when going Down
+  //CHECKS COLLISION WITH 'USED' DIVS if the next step will make it collide with the used divs when going Down
   function checkShape(currentShape) {
     const isUsed = true
     if (usedDivs.includes(currentShape[0] + width)) return isDivUsed(currentShape, isUsed)
@@ -461,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (usedDivs.includes(currentShape[3] + width)) return isDivUsed(currentShape, isUsed)
   }
   
-  //CHECKS if div is 'used' for colission
+  //MOVES THE SHAPE FROM IN PLAY TO USED
   function isDivUsed(currentShape, isUsed) {   // Is Div Used -> Row Check -> delete Row (used divs is passed from Delete Row back to Is Div Used. Is DIv Used calls the Shape Arr)
     console.log('isDivUsed')
     if (isUsed === true) {
@@ -478,10 +488,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //CHECK ROW
   function rowCheck(usedDivs) {
     let tempArr = []
-    const yMin = Math.floor(Math.min(...usedDivs) / width)
-
+    const yMin = Math.floor(Math.min(...usedDivs) / width) // Checks not the whole playfield but up to the top of 'used' divs pile
     if (yMin <= 6) return gameOver() 
-
     //Checks if a row has 10 in a row (it has to start from YMin not 0 do not change the 'for' loop)
     for (let tempY = yMin; tempY <= hight - 1; tempY ++) {
       tempArr = usedDivs.filter(div => Math.floor((div) / width) === tempY)
@@ -603,14 +611,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 38: //UP changes position
         upCount ++
-
+        //The check for the first tetromino
         if (currentShape === zShape) return zShapeUp(upCount)
         if (currentShape === sShape) return sShapeUp(upCount)
         if (currentShape === lShape) return lShapeUp(upCount)
         if (currentShape === l2Shape) return lShapeUp2(upCount)
         if (currentShape === tShape) return tShapeUp(upCount)
         if (currentShape === iShape) return iShapeUp(upCount)
-
+        //The check for all subsequent tetromino
         if (firstLocation[0] === zShape[0] && firstLocation[1] === zShape[1]) return zShapeUp(upCount)
         if (firstLocation[0] === sShape[0] && firstLocation[1] === sShape[1]) return sShapeUp(upCount)
         if (firstLocation[0] === lShape[0] && firstLocation[1] === lShape[1]) return lShapeUp(upCount)
@@ -622,7 +630,6 @@ document.addEventListener('DOMContentLoaded', () => {
       case 39: //RIGHT
         //Check before going right that all elements in array are within the board & for colission to the right
         tempArr = currentShape.filter(element => element % width < width - 1).filter(element => usedDivs.includes(element + 1) === false) 
-        
         if (tempArr.length === 4) {
           for (let i = 0; i < currentShape.length; i++) {
             cells[currentShape[i]].classList.remove('player')
