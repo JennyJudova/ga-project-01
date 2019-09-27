@@ -43,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   music.loop = true
   let musicCount = 0
 
+  //PLAY GAME VARIABLE
+  let enterCount = 0 
+
   /************************************************ GAME *******************************************/ 
 
   //CREATES GRID ***** DO NOT TOUCH *****
@@ -236,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lShape = [24,34,44,45]
     l2Shape = [25,35,45,44] 
     tShape = [34,25,35,36] 
-    sqShape = [24,25,34,35]
+    sqShape = [35,34,44,45]
     iShape = [34,35,36,37]
     allShapes.push(zShape)
     allShapes.push(sShape)
@@ -473,7 +476,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   //MOVES THE SHAPE FROM IN PLAY TO USED
   function isDivUsed(currentShape, isUsed) {   // Is Div Used -> Row Check -> delete Row (used divs is passed from Delete Row back to Is Div Used. Is DIv Used calls the Shape Arr)
-    console.log('isDivUsed')
     if (isUsed === true) {
       currentShape.forEach(element => {
         cells[element].classList.add('used')
@@ -525,6 +527,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //GAME OVER SCREEN 
   function gameOver() {
     gameEnd = true
+    clearInterval(shapeDrop)
+    enterCount = 0
     musicCount = 0
     if (highestLevel < level ) {
       highestLevel = level
@@ -578,19 +582,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       cells[143].innerHTML = 'PL'
       cells[144].innerHTML = 'AY'
-    }
-    
-    clearInterval(shapeDrop)
+    } 
   }
 
-  //***************MUSIC FUNCTION ************************* */
+  /********************************************* MUSIC FUNCTION ***************************************/
   
   function playMusic(musicCount) {
     if (musicCount % 2 === 1) return music.play()
     if (musicCount % 2 === 0) return music.pause()
   }
 
-  /************************************************************ EVENT LISTENERS *****************************************/
+  /********************************************* EVENT LISTENERS *************************************/
   //MOVESHAPE LEFT // RIGHT // DOWN 
   document.addEventListener('keydown', (e) => {
     
@@ -646,8 +648,11 @@ document.addEventListener('DOMContentLoaded', () => {
         break
       
       case 13: //ENTER - START & RESTART BUTTON
-        speedUpDrop()
-        gameStart()
+        if (enterCount < 2) {
+          speedUpDrop()
+          gameStart()
+          enterCount++
+        }
         break
 
       case 32: //SPACE - MUSIC ON/PAUSE
