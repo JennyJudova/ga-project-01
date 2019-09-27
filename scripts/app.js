@@ -271,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //DRAWS NEXT SHAPE + CURRENT SHAPE 
   function drawShape(currentShape) {
+    upCount = 0
     scoreCheck()
     const drawNShape = nextShape.map(element => element - 2)
     //Clears the next shape board
