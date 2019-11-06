@@ -33,12 +33,7 @@ The player can move the Tetrominoes left and right and rotate them clockwise in 
 
 The aim of the game is to get as many points as possible before the game board is filled with Tetrominoes.
 
-[image:95CC727C-E88D-41DA-8496-29E8F39C9DC4-3505-000013A8F2C627CF/Screenshot 2019-11-06 at 22.17.28.png]
-
 The game is traditionally a one player game. The game begins with a ‘Start Game’ screen. When the user presses ‘Enter’ they are taken to an empty grid with the first Tetromino dropping from top to bottom. The user can move the Tetromino to the right and the left, they can quicken the drop by pressing down, and they can rotate the shape clockwise by pressing up.  
-
-[image:4F572E70-D640-4510-9EB4-E3C6D93AA660-3505-000013AC0CDD7FBE/Screenshot 2019-11-06 at 22.18.32.png]
-
 
 The game build can be divided into three technical challenges:
 
@@ -54,9 +49,8 @@ COLLISION CHECK
 LINE DELETION
 * deletion of a single and multiple lines
 
-[image:643CFFE2-CE39-4421-9376-0789DDEC0B63-3505-000013B6808049D6/Screenshot 2019-11-06 at 22.20.33.png]
-
 ---
+
 ## Future improvements
 * Scoring system  - Tetris has a very specific scoring system which was not implemented here.
 * Leader board - the current game saves the highest level but not does not maintain a leader board.
