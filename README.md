@@ -4,7 +4,7 @@ This was my first project on the General Assembly Software Engineering Immersive
 
 ---
 
-<img src="./assets/pic1.png" alt="tetris start sceen" height="500" width="450">
+<img src="./assets/pic1.png" alt="tetris start screen" height="500" width="450">
 
 # Tetris aka Falling Brick Game
 
@@ -43,9 +43,9 @@ The aim of the game is to get as many points as possible before the game board i
 
 The game is traditionally a one player game. The game begins with a ‘Start Game’ screen. When the user presses ‘Enter’ they are taken to an empty grid with the first Tetromino dropping from top to bottom. The user can move the Tetromino to the right and the left, they can quicken the drop by pressing down, and they can rotate the shape clockwise by pressing up.
 
-<img src="./assets/pic2.png" alt="tetris start sceen" height="500" width="450">
+<img src="./assets/pic2.png" alt="tetris game play screen" height="500" width="450">
 
-<img src="./assets/pic3.png" alt="tetris start sceen" height="500" width="450">
+<img src="./assets/pic3.png" alt="tetris game end screen" height="500" width="450">
 
 The game build can be divided into three technical challenges:
 
